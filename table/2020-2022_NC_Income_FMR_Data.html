@@ -1,0 +1,3071 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2020-2022 NC Income and Fair Market Rent Data</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+</head>
+<body>
+    <h2>2020-2022 NC Income and Fair Market Rent Data</h2>
+    <label for="yearFilter">Filter by Year:</label>
+    <select id="yearFilter">
+        <option value="">All</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+    </select>
+
+    <table id="combinedTable" class="display" width="100%"></table>
+
+    <script>
+        $(document).ready(function() {
+            const data2020 = [
+            {
+                "County": "Alamance County",
+                "Studio": 601,
+                "One Bedroom": 659,
+                "Two Bedroom": 847,
+                "Three Bedroom": 1100,
+                "Four Bedroom": 1248,
+                "Per Capita Personal Income": 44223,
+                "Year": 2020
+            },
+            {
+                "County": "Alexander County",
+                "Studio": 569,
+                "One Bedroom": 573,
+                "Two Bedroom": 712,
+                "Three Bedroom": 918,
+                "Four Bedroom": 1035,
+                "Per Capita Personal Income": 42020,
+                "Year": 2020
+            },
+            {
+                "County": "Alleghany County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 846,
+                "Four Bedroom": 1054,
+                "Per Capita Personal Income": 41553,
+                "Year": 2020
+            },
+            {
+                "County": "Anson County",
+                "Studio": 573,
+                "One Bedroom": 577,
+                "Two Bedroom": 671,
+                "Three Bedroom": 904,
+                "Four Bedroom": 1178,
+                "Per Capita Personal Income": 42032,
+                "Year": 2020
+            },
+            {
+                "County": "Ashe County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 968,
+                "Four Bedroom": 1178,
+                "Per Capita Personal Income": 40730,
+                "Year": 2020
+            },
+            {
+                "County": "Avery County",
+                "Studio": 562,
+                "One Bedroom": 566,
+                "Two Bedroom": 741,
+                "Three Bedroom": 945,
+                "Four Bedroom": 1179,
+                "Per Capita Personal Income": 40161,
+                "Year": 2020
+            },
+            {
+                "County": "Beaufort County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 671,
+                "Three Bedroom": 906,
+                "Four Bedroom": 909,
+                "Per Capita Personal Income": 49644,
+                "Year": 2020
+            },
+            {
+                "County": "Bertie County",
+                "Studio": 573,
+                "One Bedroom": 589,
+                "Two Bedroom": 671,
+                "Three Bedroom": 851,
+                "Four Bedroom": 957,
+                "Per Capita Personal Income": 41403,
+                "Year": 2020
+            },
+            {
+                "County": "Bladen County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 906,
+                "Four Bedroom": 909,
+                "Per Capita Personal Income": 43041,
+                "Year": 2020
+            },
+            {
+                "County": "Brunswick County",
+                "Studio": 664,
+                "One Bedroom": 700,
+                "Two Bedroom": 845,
+                "Three Bedroom": 1146,
+                "Four Bedroom": 1405,
+                "Per Capita Personal Income": 53840,
+                "Year": 2020
+            },
+            {
+                "County": "Buncombe County",
+                "Studio": 1039,
+                "One Bedroom": 1045,
+                "Two Bedroom": 1255,
+                "Three Bedroom": 1717,
+                "Four Bedroom": 2203,
+                "Per Capita Personal Income": 52847,
+                "Year": 2020
+            },
+            {
+                "County": "Burke County",
+                "Studio": 569,
+                "One Bedroom": 573,
+                "Two Bedroom": 712,
+                "Three Bedroom": 918,
+                "Four Bedroom": 1035,
+                "Per Capita Personal Income": 41095,
+                "Year": 2020
+            },
+            {
+                "County": "Cabarrus County",
+                "Studio": 907,
+                "One Bedroom": 934,
+                "Two Bedroom": 1063,
+                "Three Bedroom": 1423,
+                "Four Bedroom": 1828,
+                "Per Capita Personal Income": 49313,
+                "Year": 2020
+            },
+            {
+                "County": "Caldwell County",
+                "Studio": 569,
+                "One Bedroom": 573,
+                "Two Bedroom": 712,
+                "Three Bedroom": 918,
+                "Four Bedroom": 1035,
+                "Per Capita Personal Income": 40096,
+                "Year": 2020
+            },
+            {
+                "County": "Camden County",
+                "Studio": 859,
+                "One Bedroom": 865,
+                "Two Bedroom": 1073,
+                "Three Bedroom": 1342,
+                "Four Bedroom": 1454,
+                "Per Capita Personal Income": 52318,
+                "Year": 2020
+            },
+            {
+                "County": "Carteret County",
+                "Studio": 624,
+                "One Bedroom": 628,
+                "Two Bedroom": 827,
+                "Three Bedroom": 1101,
+                "Four Bedroom": 1452,
+                "Per Capita Personal Income": 57425,
+                "Year": 2020
+            },
+            {
+                "County": "Caswell County",
+                "Studio": 573,
+                "One Bedroom": 589,
+                "Two Bedroom": 671,
+                "Three Bedroom": 890,
+                "Four Bedroom": 985,
+                "Per Capita Personal Income": 38126,
+                "Year": 2020
+            },
+            {
+                "County": "Catawba County",
+                "Studio": 569,
+                "One Bedroom": 573,
+                "Two Bedroom": 712,
+                "Three Bedroom": 918,
+                "Four Bedroom": 1035,
+                "Per Capita Personal Income": 48940,
+                "Year": 2020
+            },
+            {
+                "County": "Chatham County",
+                "Studio": 919,
+                "One Bedroom": 934,
+                "Two Bedroom": 1088,
+                "Three Bedroom": 1461,
+                "Four Bedroom": 1645,
+                "Per Capita Personal Income": 70275,
+                "Year": 2020
+            },
+            {
+                "County": "Cherokee County",
+                "Studio": 513,
+                "One Bedroom": 516,
+                "Two Bedroom": 680,
+                "Three Bedroom": 912,
+                "Four Bedroom": 1082,
+                "Per Capita Personal Income": 36538,
+                "Year": 2020
+            },
+            {
+                "County": "Chowan County",
+                "Studio": 629,
+                "One Bedroom": 633,
+                "Two Bedroom": 786,
+                "Three Bedroom": 979,
+                "Four Bedroom": 1380,
+                "Per Capita Personal Income": 45733,
+                "Year": 2020
+            },
+            {
+                "County": "Clay County",
+                "Studio": 614,
+                "One Bedroom": 618,
+                "Two Bedroom": 754,
+                "Three Bedroom": 940,
+                "Four Bedroom": 1199,
+                "Per Capita Personal Income": 40588,
+                "Year": 2020
+            },
+            {
+                "County": "Cleveland County",
+                "Studio": 496,
+                "One Bedroom": 559,
+                "Two Bedroom": 673,
+                "Three Bedroom": 876,
+                "Four Bedroom": 1106,
+                "Per Capita Personal Income": 40777,
+                "Year": 2020
+            },
+            {
+                "County": "Columbus County",
+                "Studio": 527,
+                "One Bedroom": 530,
+                "Two Bedroom": 671,
+                "Three Bedroom": 896,
+                "Four Bedroom": 1004,
+                "Per Capita Personal Income": 39746,
+                "Year": 2020
+            },
+            {
+                "County": "Craven County",
+                "Studio": 702,
+                "One Bedroom": 719,
+                "Two Bedroom": 929,
+                "Three Bedroom": 1270,
+                "Four Bedroom": 1621,
+                "Per Capita Personal Income": 49475,
+                "Year": 2020
+            },
+            {
+                "County": "Cumberland County",
+                "Studio": 719,
+                "One Bedroom": 722,
+                "Two Bedroom": 854,
+                "Three Bedroom": 1188,
+                "Four Bedroom": 1450,
+                "Per Capita Personal Income": 42554,
+                "Year": 2020
+            },
+            {
+                "County": "Currituck County",
+                "Studio": 952,
+                "One Bedroom": 958,
+                "Two Bedroom": 1136,
+                "Three Bedroom": 1603,
+                "Four Bedroom": 1994,
+                "Per Capita Personal Income": 52882,
+                "Year": 2020
+            },
+            {
+                "County": "Dare County",
+                "Studio": 785,
+                "One Bedroom": 790,
+                "Two Bedroom": 937,
+                "Three Bedroom": 1333,
+                "Four Bedroom": 1555,
+                "Per Capita Personal Income": 64544,
+                "Year": 2020
+            },
+            {
+                "County": "Davidson County",
+                "Studio": 572,
+                "One Bedroom": 576,
+                "Two Bedroom": 695,
+                "Three Bedroom": 966,
+                "Four Bedroom": 1192,
+                "Per Capita Personal Income": 43984,
+                "Year": 2020
+            },
+            {
+                "County": "Davie County",
+                "Studio": 580,
+                "One Bedroom": 617,
+                "Two Bedroom": 763,
+                "Three Bedroom": 1028,
+                "Four Bedroom": 1256,
+                "Per Capita Personal Income": 53010,
+                "Year": 2020
+            },
+            {
+                "County": "Duplin County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 844,
+                "Four Bedroom": 1133,
+                "Per Capita Personal Income": 44157,
+                "Year": 2020
+            },
+            {
+                "County": "Durham County",
+                "Studio": 919,
+                "One Bedroom": 934,
+                "Two Bedroom": 1088,
+                "Three Bedroom": 1461,
+                "Four Bedroom": 1645,
+                "Per Capita Personal Income": 53973,
+                "Year": 2020
+            },
+            {
+                "County": "Edgecombe County",
+                "Studio": 568,
+                "One Bedroom": 572,
+                "Two Bedroom": 753,
+                "Three Bedroom": 1017,
+                "Four Bedroom": 1131,
+                "Per Capita Personal Income": 40426,
+                "Year": 2020
+            },
+            {
+                "County": "Forsyth County",
+                "Studio": 580,
+                "One Bedroom": 617,
+                "Two Bedroom": 763,
+                "Three Bedroom": 1028,
+                "Four Bedroom": 1256,
+                "Per Capita Personal Income": 51667,
+                "Year": 2020
+            },
+            {
+                "County": "Franklin County",
+                "Studio": 962,
+                "One Bedroom": 1022,
+                "Two Bedroom": 1163,
+                "Three Bedroom": 1482,
+                "Four Bedroom": 1895,
+                "Per Capita Personal Income": 41803,
+                "Year": 2020
+            },
+            {
+                "County": "Gaston County",
+                "Studio": 907,
+                "One Bedroom": 934,
+                "Two Bedroom": 1063,
+                "Three Bedroom": 1423,
+                "Four Bedroom": 1828,
+                "Per Capita Personal Income": 44808,
+                "Year": 2020
+            },
+            {
+                "County": "Gates County",
+                "Studio": 585,
+                "One Bedroom": 588,
+                "Two Bedroom": 697,
+                "Three Bedroom": 1005,
+                "Four Bedroom": 1221,
+                "Per Capita Personal Income": 44611,
+                "Year": 2020
+            },
+            {
+                "County": "Graham County",
+                "Studio": 560,
+                "One Bedroom": 563,
+                "Two Bedroom": 671,
+                "Three Bedroom": 836,
+                "Four Bedroom": 1178,
+                "Per Capita Personal Income": 39293,
+                "Year": 2020
+            },
+            {
+                "County": "Granville County",
+                "Studio": 617,
+                "One Bedroom": 621,
+                "Two Bedroom": 818,
+                "Three Bedroom": 1019,
+                "Four Bedroom": 1255,
+                "Per Capita Personal Income": 42701,
+                "Year": 2020
+            },
+            {
+                "County": "Greene County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 836,
+                "Four Bedroom": 992,
+                "Per Capita Personal Income": 35078,
+                "Year": 2020
+            },
+            {
+                "County": "Guilford County",
+                "Studio": 686,
+                "One Bedroom": 728,
+                "Two Bedroom": 838,
+                "Three Bedroom": 1114,
+                "Four Bedroom": 1288,
+                "Per Capita Personal Income": 49900,
+                "Year": 2020
+            },
+            {
+                "County": "Halifax County",
+                "Studio": 555,
+                "One Bedroom": 558,
+                "Two Bedroom": 720,
+                "Three Bedroom": 950,
+                "Four Bedroom": 1062,
+                "Per Capita Personal Income": 40249,
+                "Year": 2020
+            },
+            {
+                "County": "Harnett County",
+                "Studio": 592,
+                "One Bedroom": 596,
+                "Two Bedroom": 785,
+                "Three Bedroom": 1092,
+                "Four Bedroom": 1378,
+                "Per Capita Personal Income": 39664,
+                "Year": 2020
+            },
+            {
+                "County": "Haywood County",
+                "Studio": 652,
+                "One Bedroom": 806,
+                "Two Bedroom": 918,
+                "Three Bedroom": 1167,
+                "Four Bedroom": 1484,
+                "Per Capita Personal Income": 44882,
+                "Year": 2020
+            },
+            {
+                "County": "Henderson County",
+                "Studio": 1039,
+                "One Bedroom": 1045,
+                "Two Bedroom": 1255,
+                "Three Bedroom": 1717,
+                "Four Bedroom": 2203,
+                "Per Capita Personal Income": 48378,
+                "Year": 2020
+            },
+            {
+                "County": "Hertford County",
+                "Studio": 562,
+                "One Bedroom": 566,
+                "Two Bedroom": 745,
+                "Three Bedroom": 960,
+                "Four Bedroom": 1038,
+                "Per Capita Personal Income": 38993,
+                "Year": 2020
+            },
+            {
+                "County": "Hoke County",
+                "Studio": 608,
+                "One Bedroom": 633,
+                "Two Bedroom": 721,
+                "Three Bedroom": 1040,
+                "Four Bedroom": 1266,
+                "Per Capita Personal Income": 37583,
+                "Year": 2020
+            },
+            {
+                "County": "Hyde County",
+                "Studio": 659,
+                "One Bedroom": 663,
+                "Two Bedroom": 818,
+                "Three Bedroom": 1025,
+                "Four Bedroom": 1301,
+                "Per Capita Personal Income": 45086,
+                "Year": 2020
+            },
+            {
+                "County": "Iredell County",
+                "Studio": 748,
+                "One Bedroom": 770,
+                "Two Bedroom": 876,
+                "Three Bedroom": 1170,
+                "Four Bedroom": 1538,
+                "Per Capita Personal Income": 56778,
+                "Year": 2020
+            },
+            {
+                "County": "Jackson County",
+                "Studio": 583,
+                "One Bedroom": 586,
+                "Two Bedroom": 693,
+                "Three Bedroom": 961,
+                "Four Bedroom": 1217,
+                "Per Capita Personal Income": 40196,
+                "Year": 2020
+            },
+            {
+                "County": "Johnston County",
+                "Studio": 962,
+                "One Bedroom": 1022,
+                "Two Bedroom": 1163,
+                "Three Bedroom": 1482,
+                "Four Bedroom": 1895,
+                "Per Capita Personal Income": 44945,
+                "Year": 2020
+            },
+            {
+                "County": "Jones County",
+                "Studio": 522,
+                "One Bedroom": 528,
+                "Two Bedroom": 671,
+                "Three Bedroom": 968,
+                "Four Bedroom": 1005,
+                "Per Capita Personal Income": 42505,
+                "Year": 2020
+            },
+            {
+                "County": "Lee County",
+                "Studio": 625,
+                "One Bedroom": 643,
+                "Two Bedroom": 732,
+                "Three Bedroom": 949,
+                "Four Bedroom": 992,
+                "Per Capita Personal Income": 44833,
+                "Year": 2020
+            },
+            {
+                "County": "Lenoir County",
+                "Studio": 505,
+                "One Bedroom": 547,
+                "Two Bedroom": 720,
+                "Three Bedroom": 980,
+                "Four Bedroom": 1220,
+                "Per Capita Personal Income": 44714,
+                "Year": 2020
+            },
+            {
+                "County": "Lincoln County",
+                "Studio": 654,
+                "One Bedroom": 658,
+                "Two Bedroom": 800,
+                "Three Bedroom": 1082,
+                "Four Bedroom": 1347,
+                "Per Capita Personal Income": 51873,
+                "Year": 2020
+            },
+            {
+                "County": "Macon County",
+                "Studio": 586,
+                "One Bedroom": 590,
+                "Two Bedroom": 746,
+                "Three Bedroom": 948,
+                "Four Bedroom": 1310,
+                "Per Capita Personal Income": 40139,
+                "Year": 2020
+            },
+            {
+                "County": "Madison County",
+                "Studio": 1039,
+                "One Bedroom": 1045,
+                "Two Bedroom": 1255,
+                "Three Bedroom": 1717,
+                "Four Bedroom": 2203,
+                "Per Capita Personal Income": 43926,
+                "Year": 2020
+            },
+            {
+                "County": "Martin County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 903,
+                "Four Bedroom": 1125,
+                "Per Capita Personal Income": 39905,
+                "Year": 2020
+            },
+            {
+                "County": "McDowell County",
+                "Studio": 569,
+                "One Bedroom": 572,
+                "Two Bedroom": 671,
+                "Three Bedroom": 836,
+                "Four Bedroom": 1095,
+                "Per Capita Personal Income": 38344,
+                "Year": 2020
+            },
+            {
+                "County": "Mecklenburg County",
+                "Studio": 907,
+                "One Bedroom": 934,
+                "Two Bedroom": 1063,
+                "Three Bedroom": 1423,
+                "Four Bedroom": 1828,
+                "Per Capita Personal Income": 68546,
+                "Year": 2020
+            },
+            {
+                "County": "Mitchell County",
+                "Studio": 507,
+                "One Bedroom": 510,
+                "Two Bedroom": 671,
+                "Three Bedroom": 843,
+                "Four Bedroom": 1067,
+                "Per Capita Personal Income": 40269,
+                "Year": 2020
+            },
+            {
+                "County": "Montgomery County",
+                "Studio": 530,
+                "One Bedroom": 533,
+                "Two Bedroom": 671,
+                "Three Bedroom": 867,
+                "Four Bedroom": 1082,
+                "Per Capita Personal Income": 41954,
+                "Year": 2020
+            },
+            {
+                "County": "Moore County",
+                "Studio": 666,
+                "One Bedroom": 710,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1049,
+                "Four Bedroom": 1419,
+                "Per Capita Personal Income": 57370,
+                "Year": 2020
+            },
+            {
+                "County": "Nash County",
+                "Studio": 568,
+                "One Bedroom": 572,
+                "Two Bedroom": 753,
+                "Three Bedroom": 1017,
+                "Four Bedroom": 1131,
+                "Per Capita Personal Income": 46612,
+                "Year": 2020
+            },
+            {
+                "County": "New Hanover County",
+                "Studio": 675,
+                "One Bedroom": 776,
+                "Two Bedroom": 966,
+                "Three Bedroom": 1330,
+                "Four Bedroom": 1630,
+                "Per Capita Personal Income": 54128,
+                "Year": 2020
+            },
+            {
+                "County": "Northampton County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 938,
+                "Four Bedroom": 1162,
+                "Per Capita Personal Income": 41835,
+                "Year": 2020
+            },
+            {
+                "County": "Onslow County",
+                "Studio": 704,
+                "One Bedroom": 723,
+                "Two Bedroom": 920,
+                "Three Bedroom": 1327,
+                "Four Bedroom": 1615,
+                "Per Capita Personal Income": 46781,
+                "Year": 2020
+            },
+            {
+                "County": "Orange County",
+                "Studio": 919,
+                "One Bedroom": 934,
+                "Two Bedroom": 1088,
+                "Three Bedroom": 1461,
+                "Four Bedroom": 1645,
+                "Per Capita Personal Income": 72271,
+                "Year": 2020
+            },
+            {
+                "County": "Pamlico County",
+                "Studio": 589,
+                "One Bedroom": 599,
+                "Two Bedroom": 758,
+                "Three Bedroom": 945,
+                "Four Bedroom": 1331,
+                "Per Capita Personal Income": 48844,
+                "Year": 2020
+            },
+            {
+                "County": "Pasquotank County",
+                "Studio": 585,
+                "One Bedroom": 598,
+                "Two Bedroom": 788,
+                "Three Bedroom": 1137,
+                "Four Bedroom": 1237,
+                "Per Capita Personal Income": 42956,
+                "Year": 2020
+            },
+            {
+                "County": "Pender County",
+                "Studio": 547,
+                "One Bedroom": 637,
+                "Two Bedroom": 757,
+                "Three Bedroom": 1035,
+                "Four Bedroom": 1329,
+                "Per Capita Personal Income": 45161,
+                "Year": 2020
+            },
+            {
+                "County": "Perquimans County",
+                "Studio": 657,
+                "One Bedroom": 661,
+                "Two Bedroom": 820,
+                "Three Bedroom": 1022,
+                "Four Bedroom": 1304,
+                "Per Capita Personal Income": 46806,
+                "Year": 2020
+            },
+            {
+                "County": "Person County",
+                "Studio": 545,
+                "One Bedroom": 549,
+                "Two Bedroom": 723,
+                "Three Bedroom": 969,
+                "Four Bedroom": 979,
+                "Per Capita Personal Income": 42300,
+                "Year": 2020
+            },
+            {
+                "County": "Pitt County",
+                "Studio": 616,
+                "One Bedroom": 620,
+                "Two Bedroom": 775,
+                "Three Bedroom": 1100,
+                "Four Bedroom": 1361,
+                "Per Capita Personal Income": 48920,
+                "Year": 2020
+            },
+            {
+                "County": "Polk County",
+                "Studio": 564,
+                "One Bedroom": 568,
+                "Two Bedroom": 746,
+                "Three Bedroom": 930,
+                "Four Bedroom": 1050,
+                "Per Capita Personal Income": 54915,
+                "Year": 2020
+            },
+            {
+                "County": "Randolph County",
+                "Studio": 686,
+                "One Bedroom": 728,
+                "Two Bedroom": 838,
+                "Three Bedroom": 1114,
+                "Four Bedroom": 1288,
+                "Per Capita Personal Income": 41641,
+                "Year": 2020
+            },
+            {
+                "County": "Richmond County",
+                "Studio": 573,
+                "One Bedroom": 587,
+                "Two Bedroom": 671,
+                "Three Bedroom": 882,
+                "Four Bedroom": 1030,
+                "Per Capita Personal Income": 40265,
+                "Year": 2020
+            },
+            {
+                "County": "Robeson County",
+                "Studio": 477,
+                "One Bedroom": 510,
+                "Two Bedroom": 671,
+                "Three Bedroom": 837,
+                "Four Bedroom": 931,
+                "Per Capita Personal Income": 37167,
+                "Year": 2020
+            },
+            {
+                "County": "Rockingham County",
+                "Studio": 511,
+                "One Bedroom": 514,
+                "Two Bedroom": 677,
+                "Three Bedroom": 895,
+                "Four Bedroom": 917,
+                "Per Capita Personal Income": 41380,
+                "Year": 2020
+            },
+            {
+                "County": "Rowan County",
+                "Studio": 653,
+                "One Bedroom": 681,
+                "Two Bedroom": 842,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1141,
+                "Per Capita Personal Income": 41866,
+                "Year": 2020
+            },
+            {
+                "County": "Rutherford County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 842,
+                "Four Bedroom": 1005,
+                "Per Capita Personal Income": 38322,
+                "Year": 2020
+            },
+            {
+                "County": "Sampson County",
+                "Studio": 509,
+                "One Bedroom": 512,
+                "Two Bedroom": 671,
+                "Three Bedroom": 925,
+                "Four Bedroom": 1051,
+                "Per Capita Personal Income": 40816,
+                "Year": 2020
+            },
+            {
+                "County": "Scotland County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 836,
+                "Four Bedroom": 1013,
+                "Per Capita Personal Income": 37902,
+                "Year": 2020
+            },
+            {
+                "County": "Stanly County",
+                "Studio": 534,
+                "One Bedroom": 537,
+                "Two Bedroom": 671,
+                "Three Bedroom": 913,
+                "Four Bedroom": 1063,
+                "Per Capita Personal Income": 43161,
+                "Year": 2020
+            },
+            {
+                "County": "Stokes County",
+                "Studio": 580,
+                "One Bedroom": 617,
+                "Two Bedroom": 763,
+                "Three Bedroom": 1028,
+                "Four Bedroom": 1256,
+                "Per Capita Personal Income": 41963,
+                "Year": 2020
+            },
+            {
+                "County": "Surry County",
+                "Studio": 510,
+                "One Bedroom": 514,
+                "Two Bedroom": 671,
+                "Three Bedroom": 877,
+                "Four Bedroom": 1071,
+                "Per Capita Personal Income": 43044,
+                "Year": 2020
+            },
+            {
+                "County": "Swain County",
+                "Studio": 573,
+                "One Bedroom": 589,
+                "Two Bedroom": 671,
+                "Three Bedroom": 845,
+                "Four Bedroom": 1067,
+                "Per Capita Personal Income": 44375,
+                "Year": 2020
+            },
+            {
+                "County": "Transylvania County",
+                "Studio": 567,
+                "One Bedroom": 570,
+                "Two Bedroom": 681,
+                "Three Bedroom": 867,
+                "Four Bedroom": 976,
+                "Per Capita Personal Income": 48333,
+                "Year": 2020
+            },
+            {
+                "County": "Tyrrell County",
+                "Studio": 543,
+                "One Bedroom": 546,
+                "Two Bedroom": 678,
+                "Three Bedroom": 978,
+                "Four Bedroom": 1079,
+                "Per Capita Personal Income": 44595,
+                "Year": 2020
+            },
+            {
+                "County": "Union County",
+                "Studio": 907,
+                "One Bedroom": 934,
+                "Two Bedroom": 1063,
+                "Three Bedroom": 1423,
+                "Four Bedroom": 1828,
+                "Per Capita Personal Income": 58390,
+                "Year": 2020
+            },
+            {
+                "County": "Vance County",
+                "Studio": 469,
+                "One Bedroom": 589,
+                "Two Bedroom": 671,
+                "Three Bedroom": 947,
+                "Four Bedroom": 1070,
+                "Per Capita Personal Income": 39534,
+                "Year": 2020
+            },
+            {
+                "County": "Wake County",
+                "Studio": 962,
+                "One Bedroom": 1022,
+                "Two Bedroom": 1163,
+                "Three Bedroom": 1482,
+                "Four Bedroom": 1895,
+                "Per Capita Personal Income": 65717,
+                "Year": 2020
+            },
+            {
+                "County": "Warren County",
+                "Studio": 530,
+                "One Bedroom": 534,
+                "Two Bedroom": 671,
+                "Three Bedroom": 907,
+                "Four Bedroom": 1178,
+                "Per Capita Personal Income": 35114,
+                "Year": 2020
+            },
+            {
+                "County": "Washington County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 968,
+                "Four Bedroom": 1178,
+                "Per Capita Personal Income": 41670,
+                "Year": 2020
+            },
+            {
+                "County": "Watauga County",
+                "Studio": 591,
+                "One Bedroom": 677,
+                "Two Bedroom": 865,
+                "Three Bedroom": 1141,
+                "Four Bedroom": 1174,
+                "Per Capita Personal Income": 43123,
+                "Year": 2020
+            },
+            {
+                "County": "Wayne County",
+                "Studio": 612,
+                "One Bedroom": 617,
+                "Two Bedroom": 812,
+                "Three Bedroom": 1012,
+                "Four Bedroom": 1361,
+                "Per Capita Personal Income": 44189,
+                "Year": 2020
+            },
+            {
+                "County": "Wilkes County",
+                "Studio": 506,
+                "One Bedroom": 509,
+                "Two Bedroom": 671,
+                "Three Bedroom": 957,
+                "Four Bedroom": 1093,
+                "Per Capita Personal Income": 41195,
+                "Year": 2020
+            },
+            {
+                "County": "Wilson County",
+                "Studio": 638,
+                "One Bedroom": 657,
+                "Two Bedroom": 748,
+                "Three Bedroom": 980,
+                "Four Bedroom": 1013,
+                "Per Capita Personal Income": 44619,
+                "Year": 2020
+            },
+            {
+                "County": "Yadkin County",
+                "Studio": 580,
+                "One Bedroom": 617,
+                "Two Bedroom": 763,
+                "Three Bedroom": 1028,
+                "Four Bedroom": 1256,
+                "Per Capita Personal Income": 41757,
+                "Year": 2020
+            },
+            {
+                "County": "Yancey County",
+                "Studio": 514,
+                "One Bedroom": 517,
+                "Two Bedroom": 671,
+                "Three Bedroom": 886,
+                "Four Bedroom": 1067,
+                "Per Capita Personal Income": 39418,
+                "Year": 2020
+            }
+        ]
+        
+;
+            const data2021 = [
+            {
+                "County": "Alamance County",
+                "Studio": 636,
+                "One Bedroom": 682,
+                "Two Bedroom": 885,
+                "Three Bedroom": 1126,
+                "Four Bedroom": 1201,
+                "Per Capita Personal Income": 48218,
+                "Year": 2021
+            },
+            {
+                "County": "Alexander County",
+                "Studio": 557,
+                "One Bedroom": 560,
+                "Two Bedroom": 693,
+                "Three Bedroom": 899,
+                "Four Bedroom": 1029,
+                "Per Capita Personal Income": 46049,
+                "Year": 2021
+            },
+            {
+                "County": "Alleghany County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 862,
+                "Four Bedroom": 1180,
+                "Per Capita Personal Income": 44417,
+                "Year": 2021
+            },
+            {
+                "County": "Anson County",
+                "Studio": 534,
+                "One Bedroom": 537,
+                "Two Bedroom": 693,
+                "Three Bedroom": 883,
+                "Four Bedroom": 1111,
+                "Per Capita Personal Income": 47342,
+                "Year": 2021
+            },
+            {
+                "County": "Ashe County",
+                "Studio": 531,
+                "One Bedroom": 535,
+                "Two Bedroom": 693,
+                "Three Bedroom": 963,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 44051,
+                "Year": 2021
+            },
+            {
+                "County": "Avery County",
+                "Studio": 595,
+                "One Bedroom": 599,
+                "Two Bedroom": 789,
+                "Three Bedroom": 1000,
+                "Four Bedroom": 1265,
+                "Per Capita Personal Income": 44675,
+                "Year": 2021
+            },
+            {
+                "County": "Beaufort County",
+                "Studio": 579,
+                "One Bedroom": 582,
+                "Two Bedroom": 693,
+                "Three Bedroom": 954,
+                "Four Bedroom": 958,
+                "Per Capita Personal Income": 54638,
+                "Year": 2021
+            },
+            {
+                "County": "Bertie County",
+                "Studio": 530,
+                "One Bedroom": 533,
+                "Two Bedroom": 693,
+                "Three Bedroom": 883,
+                "Four Bedroom": 986,
+                "Per Capita Personal Income": 48666,
+                "Year": 2021
+            },
+            {
+                "County": "Bladen County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 968,
+                "Four Bedroom": 986,
+                "Per Capita Personal Income": 48614,
+                "Year": 2021
+            },
+            {
+                "County": "Brunswick County",
+                "Studio": 698,
+                "One Bedroom": 720,
+                "Two Bedroom": 841,
+                "Three Bedroom": 1171,
+                "Four Bedroom": 1456,
+                "Per Capita Personal Income": 57611,
+                "Year": 2021
+            },
+            {
+                "County": "Buncombe County",
+                "Studio": 1096,
+                "One Bedroom": 1099,
+                "Two Bedroom": 1279,
+                "Three Bedroom": 1751,
+                "Four Bedroom": 2213,
+                "Per Capita Personal Income": 58883,
+                "Year": 2021
+            },
+            {
+                "County": "Burke County",
+                "Studio": 557,
+                "One Bedroom": 560,
+                "Two Bedroom": 693,
+                "Three Bedroom": 899,
+                "Four Bedroom": 1029,
+                "Per Capita Personal Income": 44126,
+                "Year": 2021
+            },
+            {
+                "County": "Cabarrus County",
+                "Studio": 987,
+                "One Bedroom": 1010,
+                "Two Bedroom": 1151,
+                "Three Bedroom": 1518,
+                "Four Bedroom": 1956,
+                "Per Capita Personal Income": 52883,
+                "Year": 2021
+            },
+            {
+                "County": "Caldwell County",
+                "Studio": 557,
+                "One Bedroom": 560,
+                "Two Bedroom": 693,
+                "Three Bedroom": 899,
+                "Four Bedroom": 1029,
+                "Per Capita Personal Income": 44196,
+                "Year": 2021
+            },
+            {
+                "County": "Camden County",
+                "Studio": 868,
+                "One Bedroom": 873,
+                "Two Bedroom": 1091,
+                "Three Bedroom": 1357,
+                "Four Bedroom": 1479,
+                "Per Capita Personal Income": 55169,
+                "Year": 2021
+            },
+            {
+                "County": "Carteret County",
+                "Studio": 638,
+                "One Bedroom": 642,
+                "Two Bedroom": 846,
+                "Three Bedroom": 1153,
+                "Four Bedroom": 1465,
+                "Per Capita Personal Income": 62138,
+                "Year": 2021
+            },
+            {
+                "County": "Caswell County",
+                "Studio": 589,
+                "One Bedroom": 608,
+                "Two Bedroom": 693,
+                "Three Bedroom": 910,
+                "Four Bedroom": 996,
+                "Per Capita Personal Income": 41671,
+                "Year": 2021
+            },
+            {
+                "County": "Catawba County",
+                "Studio": 557,
+                "One Bedroom": 560,
+                "Two Bedroom": 693,
+                "Three Bedroom": 899,
+                "Four Bedroom": 1029,
+                "Per Capita Personal Income": 53670,
+                "Year": 2021
+            },
+            {
+                "County": "Chatham County",
+                "Studio": 972,
+                "One Bedroom": 974,
+                "Two Bedroom": 1134,
+                "Three Bedroom": 1493,
+                "Four Bedroom": 1715,
+                "Per Capita Personal Income": 76790,
+                "Year": 2021
+            },
+            {
+                "County": "Cherokee County",
+                "Studio": 545,
+                "One Bedroom": 548,
+                "Two Bedroom": 715,
+                "Three Bedroom": 946,
+                "Four Bedroom": 1147,
+                "Per Capita Personal Income": 39646,
+                "Year": 2021
+            },
+            {
+                "County": "Chowan County",
+                "Studio": 643,
+                "One Bedroom": 647,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1005,
+                "Four Bedroom": 1399,
+                "Per Capita Personal Income": 50638,
+                "Year": 2021
+            },
+            {
+                "County": "Clay County",
+                "Studio": 661,
+                "One Bedroom": 665,
+                "Two Bedroom": 788,
+                "Three Bedroom": 980,
+                "Four Bedroom": 1264,
+                "Per Capita Personal Income": 43764,
+                "Year": 2021
+            },
+            {
+                "County": "Cleveland County",
+                "Studio": 494,
+                "One Bedroom": 545,
+                "Two Bedroom": 693,
+                "Three Bedroom": 919,
+                "Four Bedroom": 1126,
+                "Per Capita Personal Income": 44548,
+                "Year": 2021
+            },
+            {
+                "County": "Columbus County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 693,
+                "Three Bedroom": 923,
+                "Four Bedroom": 1006,
+                "Per Capita Personal Income": 44261,
+                "Year": 2021
+            },
+            {
+                "County": "Craven County",
+                "Studio": 728,
+                "One Bedroom": 750,
+                "Two Bedroom": 947,
+                "Three Bedroom": 1284,
+                "Four Bedroom": 1640,
+                "Per Capita Personal Income": 53991,
+                "Year": 2021
+            },
+            {
+                "County": "Cumberland County",
+                "Studio": 726,
+                "One Bedroom": 743,
+                "Two Bedroom": 869,
+                "Three Bedroom": 1208,
+                "Four Bedroom": 1472,
+                "Per Capita Personal Income": 46001,
+                "Year": 2021
+            },
+            {
+                "County": "Currituck County",
+                "Studio": 960,
+                "One Bedroom": 972,
+                "Two Bedroom": 1147,
+                "Three Bedroom": 1618,
+                "Four Bedroom": 1986,
+                "Per Capita Personal Income": 57334,
+                "Year": 2021
+            },
+            {
+                "County": "Dare County",
+                "Studio": 837,
+                "One Bedroom": 852,
+                "Two Bedroom": 976,
+                "Three Bedroom": 1347,
+                "Four Bedroom": 1594,
+                "Per Capita Personal Income": 72122,
+                "Year": 2021
+            },
+            {
+                "County": "Davidson County",
+                "Studio": 558,
+                "One Bedroom": 562,
+                "Two Bedroom": 705,
+                "Three Bedroom": 958,
+                "Four Bedroom": 1221,
+                "Per Capita Personal Income": 48005,
+                "Year": 2021
+            },
+            {
+                "County": "Davie County",
+                "Studio": 624,
+                "One Bedroom": 670,
+                "Two Bedroom": 825,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1322,
+                "Per Capita Personal Income": 58880,
+                "Year": 2021
+            },
+            {
+                "County": "Duplin County",
+                "Studio": 527,
+                "One Bedroom": 530,
+                "Two Bedroom": 699,
+                "Three Bedroom": 869,
+                "Four Bedroom": 1067,
+                "Per Capita Personal Income": 52536,
+                "Year": 2021
+            },
+            {
+                "County": "Durham County",
+                "Studio": 972,
+                "One Bedroom": 974,
+                "Two Bedroom": 1134,
+                "Three Bedroom": 1493,
+                "Four Bedroom": 1715,
+                "Per Capita Personal Income": 57849,
+                "Year": 2021
+            },
+            {
+                "County": "Edgecombe County",
+                "Studio": 600,
+                "One Bedroom": 604,
+                "Two Bedroom": 774,
+                "Three Bedroom": 1054,
+                "Four Bedroom": 1135,
+                "Per Capita Personal Income": 44090,
+                "Year": 2021
+            },
+            {
+                "County": "Forsyth County",
+                "Studio": 624,
+                "One Bedroom": 670,
+                "Two Bedroom": 825,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1322,
+                "Per Capita Personal Income": 56273,
+                "Year": 2021
+            },
+            {
+                "County": "Franklin County",
+                "Studio": 1013,
+                "One Bedroom": 1053,
+                "Two Bedroom": 1200,
+                "Three Bedroom": 1509,
+                "Four Bedroom": 1950,
+                "Per Capita Personal Income": 45785,
+                "Year": 2021
+            },
+            {
+                "County": "Gaston County",
+                "Studio": 987,
+                "One Bedroom": 1010,
+                "Two Bedroom": 1151,
+                "Three Bedroom": 1518,
+                "Four Bedroom": 1956,
+                "Per Capita Personal Income": 48748,
+                "Year": 2021
+            },
+            {
+                "County": "Gates County",
+                "Studio": 622,
+                "One Bedroom": 630,
+                "Two Bedroom": 743,
+                "Three Bedroom": 971,
+                "Four Bedroom": 1286,
+                "Per Capita Personal Income": 49434,
+                "Year": 2021
+            },
+            {
+                "County": "Graham County",
+                "Studio": 536,
+                "One Bedroom": 540,
+                "Two Bedroom": 693,
+                "Three Bedroom": 862,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 42625,
+                "Year": 2021
+            },
+            {
+                "County": "Granville County",
+                "Studio": 626,
+                "One Bedroom": 630,
+                "Two Bedroom": 830,
+                "Three Bedroom": 1032,
+                "Four Bedroom": 1277,
+                "Per Capita Personal Income": 46151,
+                "Year": 2021
+            },
+            {
+                "County": "Greene County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 898,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 39616,
+                "Year": 2021
+            },
+            {
+                "County": "Guilford County",
+                "Studio": 722,
+                "One Bedroom": 750,
+                "Two Bedroom": 859,
+                "Three Bedroom": 1135,
+                "Four Bedroom": 1289,
+                "Per Capita Personal Income": 54117,
+                "Year": 2021
+            },
+            {
+                "County": "Halifax County",
+                "Studio": 564,
+                "One Bedroom": 568,
+                "Two Bedroom": 748,
+                "Three Bedroom": 937,
+                "Four Bedroom": 1109,
+                "Per Capita Personal Income": 44549,
+                "Year": 2021
+            },
+            {
+                "County": "Harnett County",
+                "Studio": 595,
+                "One Bedroom": 599,
+                "Two Bedroom": 790,
+                "Three Bedroom": 1125,
+                "Four Bedroom": 1368,
+                "Per Capita Personal Income": 44164,
+                "Year": 2021
+            },
+            {
+                "County": "Haywood County",
+                "Studio": 587,
+                "One Bedroom": 726,
+                "Two Bedroom": 827,
+                "Three Bedroom": 1051,
+                "Four Bedroom": 1336,
+                "Per Capita Personal Income": 49360,
+                "Year": 2021
+            },
+            {
+                "County": "Henderson County",
+                "Studio": 1096,
+                "One Bedroom": 1099,
+                "Two Bedroom": 1279,
+                "Three Bedroom": 1751,
+                "Four Bedroom": 2213,
+                "Per Capita Personal Income": 53379,
+                "Year": 2021
+            },
+            {
+                "County": "Hertford County",
+                "Studio": 579,
+                "One Bedroom": 583,
+                "Two Bedroom": 768,
+                "Three Bedroom": 955,
+                "Four Bedroom": 1132,
+                "Per Capita Personal Income": 42073,
+                "Year": 2021
+            },
+            {
+                "County": "Hoke County",
+                "Studio": 617,
+                "One Bedroom": 641,
+                "Two Bedroom": 731,
+                "Three Bedroom": 1046,
+                "Four Bedroom": 1266,
+                "Per Capita Personal Income": 41494,
+                "Year": 2021
+            },
+            {
+                "County": "Hyde County",
+                "Studio": 594,
+                "One Bedroom": 597,
+                "Two Bedroom": 737,
+                "Three Bedroom": 923,
+                "Four Bedroom": 1171,
+                "Per Capita Personal Income": 49971,
+                "Year": 2021
+            },
+            {
+                "County": "Iredell County",
+                "Studio": 791,
+                "One Bedroom": 810,
+                "Two Bedroom": 923,
+                "Three Bedroom": 1244,
+                "Four Bedroom": 1582,
+                "Per Capita Personal Income": 61688,
+                "Year": 2021
+            },
+            {
+                "County": "Jackson County",
+                "Studio": 615,
+                "One Bedroom": 620,
+                "Two Bedroom": 718,
+                "Three Bedroom": 1008,
+                "Four Bedroom": 1151,
+                "Per Capita Personal Income": 44040,
+                "Year": 2021
+            },
+            {
+                "County": "Johnston County",
+                "Studio": 1013,
+                "One Bedroom": 1053,
+                "Two Bedroom": 1200,
+                "Three Bedroom": 1509,
+                "Four Bedroom": 1950,
+                "Per Capita Personal Income": 48440,
+                "Year": 2021
+            },
+            {
+                "County": "Jones County",
+                "Studio": 549,
+                "One Bedroom": 558,
+                "Two Bedroom": 693,
+                "Three Bedroom": 936,
+                "Four Bedroom": 940,
+                "Per Capita Personal Income": 50285,
+                "Year": 2021
+            },
+            {
+                "County": "Lee County",
+                "Studio": 660,
+                "One Bedroom": 682,
+                "Two Bedroom": 777,
+                "Three Bedroom": 980,
+                "Four Bedroom": 1054,
+                "Per Capita Personal Income": 49392,
+                "Year": 2021
+            },
+            {
+                "County": "Lenoir County",
+                "Studio": 515,
+                "One Bedroom": 567,
+                "Two Bedroom": 747,
+                "Three Bedroom": 1005,
+                "Four Bedroom": 1217,
+                "Per Capita Personal Income": 49888,
+                "Year": 2021
+            },
+            {
+                "County": "Lincoln County",
+                "Studio": 678,
+                "One Bedroom": 682,
+                "Two Bedroom": 843,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1257,
+                "Per Capita Personal Income": 56061,
+                "Year": 2021
+            },
+            {
+                "County": "Macon County",
+                "Studio": 621,
+                "One Bedroom": 625,
+                "Two Bedroom": 759,
+                "Three Bedroom": 956,
+                "Four Bedroom": 1314,
+                "Per Capita Personal Income": 43666,
+                "Year": 2021
+            },
+            {
+                "County": "Madison County",
+                "Studio": 1096,
+                "One Bedroom": 1099,
+                "Two Bedroom": 1279,
+                "Three Bedroom": 1751,
+                "Four Bedroom": 2213,
+                "Per Capita Personal Income": 47209,
+                "Year": 2021
+            },
+            {
+                "County": "Martin County",
+                "Studio": 538,
+                "One Bedroom": 541,
+                "Two Bedroom": 693,
+                "Three Bedroom": 963,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 43326,
+                "Year": 2021
+            },
+            {
+                "County": "McDowell County",
+                "Studio": 584,
+                "One Bedroom": 588,
+                "Two Bedroom": 693,
+                "Three Bedroom": 862,
+                "Four Bedroom": 1122,
+                "Per Capita Personal Income": 43236,
+                "Year": 2021
+            },
+            {
+                "County": "Mecklenburg County",
+                "Studio": 987,
+                "One Bedroom": 1010,
+                "Two Bedroom": 1151,
+                "Three Bedroom": 1518,
+                "Four Bedroom": 1956,
+                "Per Capita Personal Income": 73908,
+                "Year": 2021
+            },
+            {
+                "County": "Mitchell County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 863,
+                "Four Bedroom": 1111,
+                "Per Capita Personal Income": 43700,
+                "Year": 2021
+            },
+            {
+                "County": "Montgomery County",
+                "Studio": 533,
+                "One Bedroom": 537,
+                "Two Bedroom": 693,
+                "Three Bedroom": 862,
+                "Four Bedroom": 1013,
+                "Per Capita Personal Income": 45816,
+                "Year": 2021
+            },
+            {
+                "County": "Moore County",
+                "Studio": 643,
+                "One Bedroom": 687,
+                "Two Bedroom": 783,
+                "Three Bedroom": 1050,
+                "Four Bedroom": 1356,
+                "Per Capita Personal Income": 61193,
+                "Year": 2021
+            },
+            {
+                "County": "Nash County",
+                "Studio": 600,
+                "One Bedroom": 604,
+                "Two Bedroom": 774,
+                "Three Bedroom": 1054,
+                "Four Bedroom": 1135,
+                "Per Capita Personal Income": 49903,
+                "Year": 2021
+            },
+            {
+                "County": "New Hanover County",
+                "Studio": 754,
+                "One Bedroom": 873,
+                "Two Bedroom": 1069,
+                "Three Bedroom": 1449,
+                "Four Bedroom": 1841,
+                "Per Capita Personal Income": 59914,
+                "Year": 2021
+            },
+            {
+                "County": "Northampton County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 923,
+                "Four Bedroom": 1046,
+                "Per Capita Personal Income": 47581,
+                "Year": 2021
+            },
+            {
+                "County": "Onslow County",
+                "Studio": 691,
+                "One Bedroom": 721,
+                "Two Bedroom": 894,
+                "Three Bedroom": 1279,
+                "Four Bedroom": 1548,
+                "Per Capita Personal Income": 51490,
+                "Year": 2021
+            },
+            {
+                "County": "Orange County",
+                "Studio": 972,
+                "One Bedroom": 974,
+                "Two Bedroom": 1134,
+                "Three Bedroom": 1493,
+                "Four Bedroom": 1715,
+                "Per Capita Personal Income": 75349,
+                "Year": 2021
+            },
+            {
+                "County": "Pamlico County",
+                "Studio": 624,
+                "One Bedroom": 628,
+                "Two Bedroom": 795,
+                "Three Bedroom": 989,
+                "Four Bedroom": 1376,
+                "Per Capita Personal Income": 52383,
+                "Year": 2021
+            },
+            {
+                "County": "Pasquotank County",
+                "Studio": 576,
+                "One Bedroom": 625,
+                "Two Bedroom": 824,
+                "Three Bedroom": 1179,
+                "Four Bedroom": 1290,
+                "Per Capita Personal Income": 47094,
+                "Year": 2021
+            },
+            {
+                "County": "Pender County",
+                "Studio": 610,
+                "One Bedroom": 692,
+                "Two Bedroom": 843,
+                "Three Bedroom": 1160,
+                "Four Bedroom": 1406,
+                "Per Capita Personal Income": 49607,
+                "Year": 2021
+            },
+            {
+                "County": "Perquimans County",
+                "Studio": 656,
+                "One Bedroom": 660,
+                "Two Bedroom": 825,
+                "Three Bedroom": 1049,
+                "Four Bedroom": 1323,
+                "Per Capita Personal Income": 52814,
+                "Year": 2021
+            },
+            {
+                "County": "Person County",
+                "Studio": 571,
+                "One Bedroom": 574,
+                "Two Bedroom": 757,
+                "Three Bedroom": 1024,
+                "Four Bedroom": 1027,
+                "Per Capita Personal Income": 45717,
+                "Year": 2021
+            },
+            {
+                "County": "Pitt County",
+                "Studio": 700,
+                "One Bedroom": 704,
+                "Two Bedroom": 873,
+                "Three Bedroom": 1222,
+                "Four Bedroom": 1512,
+                "Per Capita Personal Income": 52716,
+                "Year": 2021
+            },
+            {
+                "County": "Polk County",
+                "Studio": 626,
+                "One Bedroom": 630,
+                "Two Bedroom": 768,
+                "Three Bedroom": 955,
+                "Four Bedroom": 1100,
+                "Per Capita Personal Income": 58680,
+                "Year": 2021
+            },
+            {
+                "County": "Randolph County",
+                "Studio": 722,
+                "One Bedroom": 750,
+                "Two Bedroom": 859,
+                "Three Bedroom": 1135,
+                "Four Bedroom": 1289,
+                "Per Capita Personal Income": 46031,
+                "Year": 2021
+            },
+            {
+                "County": "Richmond County",
+                "Studio": 594,
+                "One Bedroom": 608,
+                "Two Bedroom": 693,
+                "Three Bedroom": 942,
+                "Four Bedroom": 1117,
+                "Per Capita Personal Income": 44864,
+                "Year": 2021
+            },
+            {
+                "County": "Robeson County",
+                "Studio": 505,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 868,
+                "Four Bedroom": 960,
+                "Per Capita Personal Income": 41618,
+                "Year": 2021
+            },
+            {
+                "County": "Rockingham County",
+                "Studio": 534,
+                "One Bedroom": 537,
+                "Two Bedroom": 693,
+                "Three Bedroom": 914,
+                "Four Bedroom": 999,
+                "Per Capita Personal Income": 45428,
+                "Year": 2021
+            },
+            {
+                "County": "Rowan County",
+                "Studio": 715,
+                "One Bedroom": 724,
+                "Two Bedroom": 891,
+                "Three Bedroom": 1158,
+                "Four Bedroom": 1208,
+                "Per Capita Personal Income": 46221,
+                "Year": 2021
+            },
+            {
+                "County": "Rutherford County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 862,
+                "Four Bedroom": 993,
+                "Per Capita Personal Income": 42065,
+                "Year": 2021
+            },
+            {
+                "County": "Sampson County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 924,
+                "Four Bedroom": 1113,
+                "Per Capita Personal Income": 46657,
+                "Year": 2021
+            },
+            {
+                "County": "Scotland County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 863,
+                "Four Bedroom": 969,
+                "Per Capita Personal Income": 41005,
+                "Year": 2021
+            },
+            {
+                "County": "Stanly County",
+                "Studio": 571,
+                "One Bedroom": 574,
+                "Two Bedroom": 693,
+                "Three Bedroom": 941,
+                "Four Bedroom": 1159,
+                "Per Capita Personal Income": 47273,
+                "Year": 2021
+            },
+            {
+                "County": "Stokes County",
+                "Studio": 624,
+                "One Bedroom": 670,
+                "Two Bedroom": 825,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1322,
+                "Per Capita Personal Income": 46442,
+                "Year": 2021
+            },
+            {
+                "County": "Surry County",
+                "Studio": 541,
+                "One Bedroom": 545,
+                "Two Bedroom": 693,
+                "Three Bedroom": 908,
+                "Four Bedroom": 1123,
+                "Per Capita Personal Income": 48060,
+                "Year": 2021
+            },
+            {
+                "County": "Swain County",
+                "Studio": 589,
+                "One Bedroom": 608,
+                "Two Bedroom": 693,
+                "Three Bedroom": 899,
+                "Four Bedroom": 1111,
+                "Per Capita Personal Income": 50318,
+                "Year": 2021
+            },
+            {
+                "County": "Transylvania County",
+                "Studio": 532,
+                "One Bedroom": 536,
+                "Two Bedroom": 706,
+                "Three Bedroom": 897,
+                "Four Bedroom": 1054,
+                "Per Capita Personal Income": 53026,
+                "Year": 2021
+            },
+            {
+                "County": "Tyrrell County",
+                "Studio": 585,
+                "One Bedroom": 588,
+                "Two Bedroom": 735,
+                "Three Bedroom": 1016,
+                "Four Bedroom": 1179,
+                "Per Capita Personal Income": 47208,
+                "Year": 2021
+            },
+            {
+                "County": "Union County",
+                "Studio": 987,
+                "One Bedroom": 1010,
+                "Two Bedroom": 1151,
+                "Three Bedroom": 1518,
+                "Four Bedroom": 1956,
+                "Per Capita Personal Income": 64278,
+                "Year": 2021
+            },
+            {
+                "County": "Vance County",
+                "Studio": 540,
+                "One Bedroom": 608,
+                "Two Bedroom": 693,
+                "Three Bedroom": 979,
+                "Four Bedroom": 1113,
+                "Per Capita Personal Income": 43909,
+                "Year": 2021
+            },
+            {
+                "County": "Wake County",
+                "Studio": 1013,
+                "One Bedroom": 1053,
+                "Two Bedroom": 1200,
+                "Three Bedroom": 1509,
+                "Four Bedroom": 1950,
+                "Per Capita Personal Income": 73800,
+                "Year": 2021
+            },
+            {
+                "County": "Warren County",
+                "Studio": 522,
+                "One Bedroom": 526,
+                "Two Bedroom": 693,
+                "Three Bedroom": 897,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 38664,
+                "Year": 2021
+            },
+            {
+                "County": "Washington County",
+                "Studio": 551,
+                "One Bedroom": 555,
+                "Two Bedroom": 693,
+                "Three Bedroom": 992,
+                "Four Bedroom": 1200,
+                "Per Capita Personal Income": 46449,
+                "Year": 2021
+            },
+            {
+                "County": "Watauga County",
+                "Studio": 609,
+                "One Bedroom": 660,
+                "Two Bedroom": 826,
+                "Three Bedroom": 1084,
+                "Four Bedroom": 1120,
+                "Per Capita Personal Income": 46432,
+                "Year": 2021
+            },
+            {
+                "County": "Wayne County",
+                "Studio": 623,
+                "One Bedroom": 628,
+                "Two Bedroom": 827,
+                "Three Bedroom": 1029,
+                "Four Bedroom": 1395,
+                "Per Capita Personal Income": 49132,
+                "Year": 2021
+            },
+            {
+                "County": "Wilkes County",
+                "Studio": 539,
+                "One Bedroom": 543,
+                "Two Bedroom": 693,
+                "Three Bedroom": 992,
+                "Four Bedroom": 1120,
+                "Per Capita Personal Income": 45732,
+                "Year": 2021
+            },
+            {
+                "County": "Wilson County",
+                "Studio": 661,
+                "One Bedroom": 682,
+                "Two Bedroom": 778,
+                "Three Bedroom": 998,
+                "Four Bedroom": 1055,
+                "Per Capita Personal Income": 48558,
+                "Year": 2021
+            },
+            {
+                "County": "Yadkin County",
+                "Studio": 624,
+                "One Bedroom": 670,
+                "Two Bedroom": 825,
+                "Three Bedroom": 1111,
+                "Four Bedroom": 1322,
+                "Per Capita Personal Income": 46694,
+                "Year": 2021
+            },
+            {
+                "County": "Yancey County",
+                "Studio": 505,
+                "One Bedroom": 550,
+                "Two Bedroom": 693,
+                "Three Bedroom": 918,
+                "Four Bedroom": 1062,
+                "Per Capita Personal Income": 41798,
+                "Year": 2021
+            }
+        ]
+        
+;
+            const data2022 = [
+            {
+                "County": "Alamance County",
+                "Studio": 619,
+                "One Bedroom": 698,
+                "Two Bedroom": 891,
+                "Three Bedroom": 1126,
+                "Four Bedroom": 1208,
+                "Per Capita Personal Income": 48980,
+                "Year": 2022
+            },
+            {
+                "County": "Alexander County",
+                "Studio": 589,
+                "One Bedroom": 592,
+                "Two Bedroom": 724,
+                "Three Bedroom": 943,
+                "Four Bedroom": 1085,
+                "Per Capita Personal Income": 48035,
+                "Year": 2022
+            },
+            {
+                "County": "Alleghany County",
+                "Studio": 557,
+                "One Bedroom": 561,
+                "Two Bedroom": 738,
+                "Three Bedroom": 912,
+                "Four Bedroom": 1250,
+                "Per Capita Personal Income": 44464,
+                "Year": 2022
+            },
+            {
+                "County": "Anson County",
+                "Studio": 535,
+                "One Bedroom": 612,
+                "Two Bedroom": 805,
+                "Three Bedroom": 995,
+                "Four Bedroom": 1211,
+                "Per Capita Personal Income": 50187,
+                "Year": 2022
+            },
+            {
+                "County": "Ashe County",
+                "Studio": 569,
+                "One Bedroom": 573,
+                "Two Bedroom": 724,
+                "Three Bedroom": 901,
+                "Four Bedroom": 1208,
+                "Per Capita Personal Income": 44433,
+                "Year": 2022
+            },
+            {
+                "County": "Avery County",
+                "Studio": 645,
+                "One Bedroom": 649,
+                "Two Bedroom": 854,
+                "Three Bedroom": 1056,
+                "Four Bedroom": 1158,
+                "Per Capita Personal Income": 45653,
+                "Year": 2022
+            },
+            {
+                "County": "Beaufort County",
+                "Studio": 571,
+                "One Bedroom": 575,
+                "Two Bedroom": 724,
+                "Three Bedroom": 997,
+                "Four Bedroom": 1100,
+                "Per Capita Personal Income": 54554,
+                "Year": 2022
+            },
+            {
+                "County": "Bertie County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 925,
+                "Four Bedroom": 1120,
+                "Per Capita Personal Income": 49409,
+                "Year": 2022
+            },
+            {
+                "County": "Bladen County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 997,
+                "Four Bedroom": 1136,
+                "Per Capita Personal Income": 48424,
+                "Year": 2022
+            },
+            {
+                "County": "Brunswick County",
+                "Studio": 786,
+                "One Bedroom": 813,
+                "Two Bedroom": 926,
+                "Three Bedroom": 1315,
+                "Four Bedroom": 1585,
+                "Per Capita Personal Income": 58281,
+                "Year": 2022
+            },
+            {
+                "County": "Buncombe County",
+                "Studio": 1188,
+                "One Bedroom": 1209,
+                "Two Bedroom": 1378,
+                "Three Bedroom": 1879,
+                "Four Bedroom": 2359,
+                "Per Capita Personal Income": 61560,
+                "Year": 2022
+            },
+            {
+                "County": "Burke County",
+                "Studio": 589,
+                "One Bedroom": 592,
+                "Two Bedroom": 724,
+                "Three Bedroom": 943,
+                "Four Bedroom": 1085,
+                "Per Capita Personal Income": 44631,
+                "Year": 2022
+            },
+            {
+                "County": "Cabarrus County",
+                "Studio": 996,
+                "One Bedroom": 1014,
+                "Two Bedroom": 1155,
+                "Three Bedroom": 1497,
+                "Four Bedroom": 1942,
+                "Per Capita Personal Income": 54754,
+                "Year": 2022
+            },
+            {
+                "County": "Caldwell County",
+                "Studio": 589,
+                "One Bedroom": 592,
+                "Two Bedroom": 724,
+                "Three Bedroom": 943,
+                "Four Bedroom": 1085,
+                "Per Capita Personal Income": 44761,
+                "Year": 2022
+            },
+            {
+                "County": "Camden County",
+                "Studio": 782,
+                "One Bedroom": 797,
+                "Two Bedroom": 982,
+                "Three Bedroom": 1328,
+                "Four Bedroom": 1600,
+                "Per Capita Personal Income": 56906,
+                "Year": 2022
+            },
+            {
+                "County": "Carteret County",
+                "Studio": 692,
+                "One Bedroom": 696,
+                "Two Bedroom": 916,
+                "Three Bedroom": 1264,
+                "Four Bedroom": 1568,
+                "Per Capita Personal Income": 63531,
+                "Year": 2022
+            },
+            {
+                "County": "Caswell County",
+                "Studio": 589,
+                "One Bedroom": 635,
+                "Two Bedroom": 724,
+                "Three Bedroom": 996,
+                "Four Bedroom": 1036,
+                "Per Capita Personal Income": 41155,
+                "Year": 2022
+            },
+            {
+                "County": "Catawba County",
+                "Studio": 589,
+                "One Bedroom": 592,
+                "Two Bedroom": 724,
+                "Three Bedroom": 943,
+                "Four Bedroom": 1085,
+                "Per Capita Personal Income": 55223,
+                "Year": 2022
+            },
+            {
+                "County": "Chatham County",
+                "Studio": 1024,
+                "One Bedroom": 1030,
+                "Two Bedroom": 1199,
+                "Three Bedroom": 1546,
+                "Four Bedroom": 1812,
+                "Per Capita Personal Income": 79769,
+                "Year": 2022
+            },
+            {
+                "County": "Cherokee County",
+                "Studio": 579,
+                "One Bedroom": 583,
+                "Two Bedroom": 767,
+                "Three Bedroom": 1000,
+                "Four Bedroom": 1151,
+                "Per Capita Personal Income": 40021,
+                "Year": 2022
+            },
+            {
+                "County": "Chowan County",
+                "Studio": 681,
+                "One Bedroom": 685,
+                "Two Bedroom": 857,
+                "Three Bedroom": 1059,
+                "Four Bedroom": 1467,
+                "Per Capita Personal Income": 51005,
+                "Year": 2022
+            },
+            {
+                "County": "Clay County",
+                "Studio": 668,
+                "One Bedroom": 721,
+                "Two Bedroom": 821,
+                "Three Bedroom": 1015,
+                "Four Bedroom": 1296,
+                "Per Capita Personal Income": 43753,
+                "Year": 2022
+            },
+            {
+                "County": "Cleveland County",
+                "Studio": 504,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 976,
+                "Four Bedroom": 1160,
+                "Per Capita Personal Income": 45126,
+                "Year": 2022
+            },
+            {
+                "County": "Columbus County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 946,
+                "Four Bedroom": 1143,
+                "Per Capita Personal Income": 44109,
+                "Year": 2022
+            },
+            {
+                "County": "Craven County",
+                "Studio": 764,
+                "One Bedroom": 771,
+                "Two Bedroom": 984,
+                "Three Bedroom": 1319,
+                "Four Bedroom": 1684,
+                "Per Capita Personal Income": 54327,
+                "Year": 2022
+            },
+            {
+                "County": "Cumberland County",
+                "Studio": 771,
+                "One Bedroom": 784,
+                "Two Bedroom": 913,
+                "Three Bedroom": 1262,
+                "Four Bedroom": 1546,
+                "Per Capita Personal Income": 46024,
+                "Year": 2022
+            },
+            {
+                "County": "Currituck County",
+                "Studio": 993,
+                "One Bedroom": 1015,
+                "Two Bedroom": 1193,
+                "Three Bedroom": 1676,
+                "Four Bedroom": 2042,
+                "Per Capita Personal Income": 59381,
+                "Year": 2022
+            },
+            {
+                "County": "Dare County",
+                "Studio": 866,
+                "One Bedroom": 895,
+                "Two Bedroom": 1054,
+                "Three Bedroom": 1415,
+                "Four Bedroom": 1658,
+                "Per Capita Personal Income": 76100,
+                "Year": 2022
+            },
+            {
+                "County": "Davidson County",
+                "Studio": 553,
+                "One Bedroom": 556,
+                "Two Bedroom": 724,
+                "Three Bedroom": 973,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 48523,
+                "Year": 2022
+            },
+            {
+                "County": "Davie County",
+                "Studio": 623,
+                "One Bedroom": 664,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1075,
+                "Four Bedroom": 1249,
+                "Per Capita Personal Income": 60579,
+                "Year": 2022
+            },
+            {
+                "County": "Duplin County",
+                "Studio": 556,
+                "One Bedroom": 560,
+                "Two Bedroom": 737,
+                "Three Bedroom": 911,
+                "Four Bedroom": 1054,
+                "Per Capita Personal Income": 52760,
+                "Year": 2022
+            },
+            {
+                "County": "Durham County",
+                "Studio": 1024,
+                "One Bedroom": 1030,
+                "Two Bedroom": 1199,
+                "Three Bedroom": 1546,
+                "Four Bedroom": 1812,
+                "Per Capita Personal Income": 59070,
+                "Year": 2022
+            },
+            {
+                "County": "Edgecombe County",
+                "Studio": 625,
+                "One Bedroom": 639,
+                "Two Bedroom": 813,
+                "Three Bedroom": 1106,
+                "Four Bedroom": 1198,
+                "Per Capita Personal Income": 43507,
+                "Year": 2022
+            },
+            {
+                "County": "Forsyth County",
+                "Studio": 623,
+                "One Bedroom": 664,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1075,
+                "Four Bedroom": 1249,
+                "Per Capita Personal Income": 57781,
+                "Year": 2022
+            },
+            {
+                "County": "Franklin County",
+                "Studio": 1038,
+                "One Bedroom": 1073,
+                "Two Bedroom": 1223,
+                "Three Bedroom": 1517,
+                "Four Bedroom": 1982,
+                "Per Capita Personal Income": 46330,
+                "Year": 2022
+            },
+            {
+                "County": "Gaston County",
+                "Studio": 996,
+                "One Bedroom": 1014,
+                "Two Bedroom": 1155,
+                "Three Bedroom": 1497,
+                "Four Bedroom": 1942,
+                "Per Capita Personal Income": 49674,
+                "Year": 2022
+            },
+            {
+                "County": "Gates County",
+                "Studio": 663,
+                "One Bedroom": 677,
+                "Two Bedroom": 795,
+                "Three Bedroom": 1023,
+                "Four Bedroom": 1317,
+                "Per Capita Personal Income": 49850,
+                "Year": 2022
+            },
+            {
+                "County": "Graham County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 895,
+                "Four Bedroom": 1143,
+                "Per Capita Personal Income": 41336,
+                "Year": 2022
+            },
+            {
+                "County": "Granville County",
+                "Studio": 666,
+                "One Bedroom": 670,
+                "Two Bedroom": 863,
+                "Three Bedroom": 1093,
+                "Four Bedroom": 1349,
+                "Per Capita Personal Income": 46906,
+                "Year": 2022
+            },
+            {
+                "County": "Greene County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 989,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 38963,
+                "Year": 2022
+            },
+            {
+                "County": "Guilford County",
+                "Studio": 810,
+                "One Bedroom": 836,
+                "Two Bedroom": 952,
+                "Three Bedroom": 1243,
+                "Four Bedroom": 1424,
+                "Per Capita Personal Income": 55008,
+                "Year": 2022
+            },
+            {
+                "County": "Halifax County",
+                "Studio": 614,
+                "One Bedroom": 618,
+                "Two Bedroom": 813,
+                "Three Bedroom": 1005,
+                "Four Bedroom": 1201,
+                "Per Capita Personal Income": 44768,
+                "Year": 2022
+            },
+            {
+                "County": "Harnett County",
+                "Studio": 646,
+                "One Bedroom": 651,
+                "Two Bedroom": 856,
+                "Three Bedroom": 1216,
+                "Four Bedroom": 1465,
+                "Per Capita Personal Income": 44192,
+                "Year": 2022
+            },
+            {
+                "County": "Haywood County",
+                "Studio": 637,
+                "One Bedroom": 822,
+                "Two Bedroom": 937,
+                "Three Bedroom": 1165,
+                "Four Bedroom": 1422,
+                "Per Capita Personal Income": 50894,
+                "Year": 2022
+            },
+            {
+                "County": "Henderson County",
+                "Studio": 1188,
+                "One Bedroom": 1209,
+                "Two Bedroom": 1378,
+                "Three Bedroom": 1879,
+                "Four Bedroom": 2359,
+                "Per Capita Personal Income": 55243,
+                "Year": 2022
+            },
+            {
+                "County": "Hertford County",
+                "Studio": 619,
+                "One Bedroom": 623,
+                "Two Bedroom": 820,
+                "Three Bedroom": 1014,
+                "Four Bedroom": 1191,
+                "Per Capita Personal Income": 41529,
+                "Year": 2022
+            },
+            {
+                "County": "Hoke County",
+                "Studio": 642,
+                "One Bedroom": 646,
+                "Two Bedroom": 771,
+                "Three Bedroom": 1095,
+                "Four Bedroom": 1320,
+                "Per Capita Personal Income": 41181,
+                "Year": 2022
+            },
+            {
+                "County": "Hyde County",
+                "Studio": 587,
+                "One Bedroom": 591,
+                "Two Bedroom": 739,
+                "Three Bedroom": 956,
+                "Four Bedroom": 1167,
+                "Per Capita Personal Income": 48593,
+                "Year": 2022
+            },
+            {
+                "County": "Iredell County",
+                "Studio": 798,
+                "One Bedroom": 812,
+                "Two Bedroom": 925,
+                "Three Bedroom": 1232,
+                "Four Bedroom": 1583,
+                "Per Capita Personal Income": 64437,
+                "Year": 2022
+            },
+            {
+                "County": "Jackson County",
+                "Studio": 626,
+                "One Bedroom": 637,
+                "Two Bedroom": 726,
+                "Three Bedroom": 1030,
+                "Four Bedroom": 1146,
+                "Per Capita Personal Income": 44870,
+                "Year": 2022
+            },
+            {
+                "County": "Johnston County",
+                "Studio": 1038,
+                "One Bedroom": 1073,
+                "Two Bedroom": 1223,
+                "Three Bedroom": 1517,
+                "Four Bedroom": 1982,
+                "Per Capita Personal Income": 49672,
+                "Year": 2022
+            },
+            {
+                "County": "Jones County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 988,
+                "Four Bedroom": 992,
+                "Per Capita Personal Income": 48585,
+                "Year": 2022
+            },
+            {
+                "County": "Lee County",
+                "Studio": 671,
+                "One Bedroom": 723,
+                "Two Bedroom": 824,
+                "Three Bedroom": 1030,
+                "Four Bedroom": 1196,
+                "Per Capita Personal Income": 49622,
+                "Year": 2022
+            },
+            {
+                "County": "Lenoir County",
+                "Studio": 505,
+                "One Bedroom": 578,
+                "Two Bedroom": 760,
+                "Three Bedroom": 1025,
+                "Four Bedroom": 1201,
+                "Per Capita Personal Income": 51039,
+                "Year": 2022
+            },
+            {
+                "County": "Lincoln County",
+                "Studio": 669,
+                "One Bedroom": 673,
+                "Two Bedroom": 816,
+                "Three Bedroom": 1054,
+                "Four Bedroom": 1132,
+                "Per Capita Personal Income": 58227,
+                "Year": 2022
+            },
+            {
+                "County": "McDowell County",
+                "Studio": 593,
+                "One Bedroom": 597,
+                "Two Bedroom": 724,
+                "Three Bedroom": 895,
+                "Four Bedroom": 1127,
+                "Per Capita Personal Income": 43983,
+                "Year": 2022
+            },
+            {
+                "County": "Macon County",
+                "Studio": 660,
+                "One Bedroom": 695,
+                "Two Bedroom": 811,
+                "Three Bedroom": 1003,
+                "Four Bedroom": 1388,
+                "Per Capita Personal Income": 48309,
+                "Year": 2022
+            },
+            {
+                "County": "Madison County",
+                "Studio": 1188,
+                "One Bedroom": 1209,
+                "Two Bedroom": 1378,
+                "Three Bedroom": 1879,
+                "Four Bedroom": 2359,
+                "Per Capita Personal Income": 44497,
+                "Year": 2022
+            },
+            {
+                "County": "Martin County",
+                "Studio": 558,
+                "One Bedroom": 561,
+                "Two Bedroom": 724,
+                "Three Bedroom": 996,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 42553,
+                "Year": 2022
+            },
+            {
+                "County": "Mecklenburg County",
+                "Studio": 996,
+                "One Bedroom": 1014,
+                "Two Bedroom": 1155,
+                "Three Bedroom": 1497,
+                "Four Bedroom": 1942,
+                "Per Capita Personal Income": 76441,
+                "Year": 2022
+            },
+            {
+                "County": "Mitchell County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 895,
+                "Four Bedroom": 1143,
+                "Per Capita Personal Income": 43990,
+                "Year": 2022
+            },
+            {
+                "County": "Montgomery County",
+                "Studio": 558,
+                "One Bedroom": 561,
+                "Two Bedroom": 724,
+                "Three Bedroom": 895,
+                "Four Bedroom": 1083,
+                "Per Capita Personal Income": 46774,
+                "Year": 2022
+            },
+            {
+                "County": "Moore County",
+                "Studio": 695,
+                "One Bedroom": 744,
+                "Two Bedroom": 848,
+                "Three Bedroom": 1168,
+                "Four Bedroom": 1451,
+                "Per Capita Personal Income": 62886,
+                "Year": 2022
+            },
+            {
+                "County": "Nash County",
+                "Studio": 625,
+                "One Bedroom": 639,
+                "Two Bedroom": 813,
+                "Three Bedroom": 1106,
+                "Four Bedroom": 1198,
+                "Per Capita Personal Income": 50715,
+                "Year": 2022
+            },
+            {
+                "County": "New Hanover County",
+                "Studio": 814,
+                "One Bedroom": 988,
+                "Two Bedroom": 1164,
+                "Three Bedroom": 1545,
+                "Four Bedroom": 1992,
+                "Per Capita Personal Income": 60943,
+                "Year": 2022
+            },
+            {
+                "County": "Northampton County",
+                "Studio": 572,
+                "One Bedroom": 575,
+                "Two Bedroom": 757,
+                "Three Bedroom": 936,
+                "Four Bedroom": 1027,
+                "Per Capita Personal Income": 47614,
+                "Year": 2022
+            },
+            {
+                "County": "Onslow County",
+                "Studio": 634,
+                "One Bedroom": 737,
+                "Two Bedroom": 876,
+                "Three Bedroom": 1244,
+                "Four Bedroom": 1499,
+                "Per Capita Personal Income": 51585,
+                "Year": 2022
+            },
+            {
+                "County": "Orange County",
+                "Studio": 1024,
+                "One Bedroom": 1030,
+                "Two Bedroom": 1199,
+                "Three Bedroom": 1546,
+                "Four Bedroom": 1812,
+                "Per Capita Personal Income": 77568,
+                "Year": 2022
+            },
+            {
+                "County": "Pamlico County",
+                "Studio": 639,
+                "One Bedroom": 644,
+                "Two Bedroom": 847,
+                "Three Bedroom": 1047,
+                "Four Bedroom": 1450,
+                "Per Capita Personal Income": 52301,
+                "Year": 2022
+            },
+            {
+                "County": "Pasquotank County",
+                "Studio": 581,
+                "One Bedroom": 665,
+                "Two Bedroom": 875,
+                "Three Bedroom": 1234,
+                "Four Bedroom": 1384,
+                "Per Capita Personal Income": 47234,
+                "Year": 2022
+            },
+            {
+                "County": "Pender County",
+                "Studio": 645,
+                "One Bedroom": 772,
+                "Two Bedroom": 902,
+                "Three Bedroom": 1235,
+                "Four Bedroom": 1431,
+                "Per Capita Personal Income": 49887,
+                "Year": 2022
+            },
+            {
+                "County": "Perquimans County",
+                "Studio": 651,
+                "One Bedroom": 655,
+                "Two Bedroom": 862,
+                "Three Bedroom": 1175,
+                "Four Bedroom": 1475,
+                "Per Capita Personal Income": 53355,
+                "Year": 2022
+            },
+            {
+                "County": "Person County",
+                "Studio": 589,
+                "One Bedroom": 593,
+                "Two Bedroom": 780,
+                "Three Bedroom": 1054,
+                "Four Bedroom": 1058,
+                "Per Capita Personal Income": 45304,
+                "Year": 2022
+            },
+            {
+                "County": "Pitt County",
+                "Studio": 730,
+                "One Bedroom": 734,
+                "Two Bedroom": 910,
+                "Three Bedroom": 1249,
+                "Four Bedroom": 1558,
+                "Per Capita Personal Income": 53495,
+                "Year": 2022
+            },
+            {
+                "County": "Polk County",
+                "Studio": 710,
+                "One Bedroom": 713,
+                "Two Bedroom": 823,
+                "Three Bedroom": 1017,
+                "Four Bedroom": 1195,
+                "Per Capita Personal Income": 61494,
+                "Year": 2022
+            },
+            {
+                "County": "Randolph County",
+                "Studio": 810,
+                "One Bedroom": 836,
+                "Two Bedroom": 952,
+                "Three Bedroom": 1243,
+                "Four Bedroom": 1424,
+                "Per Capita Personal Income": 46748,
+                "Year": 2022
+            },
+            {
+                "County": "Richmond County",
+                "Studio": 624,
+                "One Bedroom": 635,
+                "Two Bedroom": 724,
+                "Three Bedroom": 1020,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 46009,
+                "Year": 2022
+            },
+            {
+                "County": "Robeson County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 919,
+                "Four Bedroom": 1021,
+                "Per Capita Personal Income": 41071,
+                "Year": 2022
+            },
+            {
+                "County": "Rockingham County",
+                "Studio": 581,
+                "One Bedroom": 585,
+                "Two Bedroom": 755,
+                "Three Bedroom": 991,
+                "Four Bedroom": 1129,
+                "Per Capita Personal Income": 45332,
+                "Year": 2022
+            },
+            {
+                "County": "Rowan County",
+                "Studio": 707,
+                "One Bedroom": 712,
+                "Two Bedroom": 874,
+                "Three Bedroom": 1144,
+                "Four Bedroom": 1185,
+                "Per Capita Personal Income": 46990,
+                "Year": 2022
+            },
+            {
+                "County": "Rutherford County",
+                "Studio": 563,
+                "One Bedroom": 567,
+                "Two Bedroom": 724,
+                "Three Bedroom": 895,
+                "Four Bedroom": 1060,
+                "Per Capita Personal Income": 42525,
+                "Year": 2022
+            },
+            {
+                "County": "Sampson County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 930,
+                "Four Bedroom": 1121,
+                "Per Capita Personal Income": 46849,
+                "Year": 2022
+            },
+            {
+                "County": "Scotland County",
+                "Studio": 547,
+                "One Bedroom": 550,
+                "Two Bedroom": 724,
+                "Three Bedroom": 912,
+                "Four Bedroom": 982,
+                "Per Capita Personal Income": 41064,
+                "Year": 2022
+            },
+            {
+                "County": "Stanly County",
+                "Studio": 517,
+                "One Bedroom": 641,
+                "Two Bedroom": 747,
+                "Three Bedroom": 998,
+                "Four Bedroom": 1256,
+                "Per Capita Personal Income": 48212,
+                "Year": 2022
+            },
+            {
+                "County": "Stokes County",
+                "Studio": 623,
+                "One Bedroom": 664,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1075,
+                "Four Bedroom": 1249,
+                "Per Capita Personal Income": 46391,
+                "Year": 2022
+            },
+            {
+                "County": "Surry County",
+                "Studio": 583,
+                "One Bedroom": 587,
+                "Two Bedroom": 724,
+                "Three Bedroom": 946,
+                "Four Bedroom": 1184,
+                "Per Capita Personal Income": 48778,
+                "Year": 2022
+            },
+            {
+                "County": "Swain County",
+                "Studio": 575,
+                "One Bedroom": 579,
+                "Two Bedroom": 724,
+                "Three Bedroom": 986,
+                "Four Bedroom": 1143,
+                "Per Capita Personal Income": 51517,
+                "Year": 2022
+            },
+            {
+                "County": "Transylvania County",
+                "Studio": 706,
+                "One Bedroom": 711,
+                "Two Bedroom": 935,
+                "Three Bedroom": 1156,
+                "Four Bedroom": 1364,
+                "Per Capita Personal Income": 55406,
+                "Year": 2022
+            },
+            {
+                "County": "Tyrrell County",
+                "Studio": 651,
+                "One Bedroom": 702,
+                "Two Bedroom": 800,
+                "Three Bedroom": 1072,
+                "Four Bedroom": 1263,
+                "Per Capita Personal Income": 45079,
+                "Year": 2022
+            },
+            {
+                "County": "Union County",
+                "Studio": 996,
+                "One Bedroom": 1014,
+                "Two Bedroom": 1155,
+                "Three Bedroom": 1497,
+                "Four Bedroom": 1942,
+                "Per Capita Personal Income": 67641,
+                "Year": 2022
+            },
+            {
+                "County": "Vance County",
+                "Studio": 631,
+                "One Bedroom": 640,
+                "Two Bedroom": 741,
+                "Three Bedroom": 1006,
+                "Four Bedroom": 1175,
+                "Per Capita Personal Income": 43356,
+                "Year": 2022
+            },
+            {
+                "County": "Wake County",
+                "Studio": 1038,
+                "One Bedroom": 1073,
+                "Two Bedroom": 1223,
+                "Three Bedroom": 1517,
+                "Four Bedroom": 1982,
+                "Per Capita Personal Income": 76357,
+                "Year": 2022
+            },
+            {
+                "County": "Warren County",
+                "Studio": 555,
+                "One Bedroom": 558,
+                "Two Bedroom": 724,
+                "Three Bedroom": 946,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 37601,
+                "Year": 2022
+            },
+            {
+                "County": "Washington County",
+                "Studio": 575,
+                "One Bedroom": 579,
+                "Two Bedroom": 724,
+                "Three Bedroom": 980,
+                "Four Bedroom": 1239,
+                "Per Capita Personal Income": 45405,
+                "Year": 2022
+            },
+            {
+                "County": "Watauga County",
+                "Studio": 665,
+                "One Bedroom": 741,
+                "Two Bedroom": 913,
+                "Three Bedroom": 1180,
+                "Four Bedroom": 1441,
+                "Per Capita Personal Income": 48445,
+                "Year": 2022
+            },
+            {
+                "County": "Wayne County",
+                "Studio": 641,
+                "One Bedroom": 645,
+                "Two Bedroom": 849,
+                "Three Bedroom": 1049,
+                "Four Bedroom": 1429,
+                "Per Capita Personal Income": 49370,
+                "Year": 2022
+            },
+            {
+                "County": "Wilkes County",
+                "Studio": 589,
+                "One Bedroom": 610,
+                "Two Bedroom": 724,
+                "Three Bedroom": 998,
+                "Four Bedroom": 1127,
+                "Per Capita Personal Income": 47495,
+                "Year": 2022
+            },
+            {
+                "County": "Wilson County",
+                "Studio": 595,
+                "One Bedroom": 680,
+                "Two Bedroom": 823,
+                "Three Bedroom": 1029,
+                "Four Bedroom": 1116,
+                "Per Capita Personal Income": 48774,
+                "Year": 2022
+            },
+            {
+                "County": "Yadkin County",
+                "Studio": 623,
+                "One Bedroom": 664,
+                "Two Bedroom": 808,
+                "Three Bedroom": 1075,
+                "Four Bedroom": 1249,
+                "Per Capita Personal Income": 47455,
+                "Year": 2022
+            },
+            {
+                "County": "Yancey County",
+                "Studio": 528,
+                "One Bedroom": 566,
+                "Two Bedroom": 724,
+                "Three Bedroom": 977,
+                "Four Bedroom": 1154,
+                "Per Capita Personal Income": 42006,
+                "Year": 2022
+            }
+        ]
+        
+;
+
+             // Add a "Year" property to each dataset
+             data2020.forEach(entry => entry.Year = 2020);
+             data2021.forEach(entry => entry.Year = 2021);
+             data2022.forEach(entry => entry.Year = 2022);
+ 
+             // Combine data for display
+             const combinedData = [...data2020, ...data2021, ...data2022];
+ 
+             // Initialize DataTable
+             const table = $('#combinedTable').DataTable({
+                 data: combinedData,
+                 columns: [
+                     { title: "County", data: "County" },
+                     { title: "Year", data: "Year" },
+                     { title: "Per Capita Personal Income", data: "Per Capita Personal Income" },
+                     { title: "Studio", data: "Studio" },
+                     { title: "One Bedroom", data: "One Bedroom" },
+                     { title: "Two Bedroom", data: "Two Bedroom" },
+                     { title: "Three Bedroom", data: "Three Bedroom" },
+                     { title: "Four Bedroom", data: "Four Bedroom" }
+                 ]
+             });
+ 
+             // Filter by year
+             $('#yearFilter').on('change', function() {
+                 const selectedYear = $(this).val();
+                 if (selectedYear) {
+                     table.column(1).search('^' + selectedYear + '$', true, false).draw();
+                 } else {
+                     table.column(1).search('').draw();
+                 }
+             });
+         });
+     </script>
+ </body>
+ </html>

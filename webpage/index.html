@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rent in North Carolina</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="top-container">
+        <div class="line-chart">
+            <h2>Rent Trends Over Time</h2>
+            <!-- Placeholder for line chart -->
+            <img src="line-chart-placeholder.png" alt="Line Chart">
+        </div>
+
+        <div class="map">
+            <h2>Rent Prices Across NC</h2>
+            <!-- Placeholder for map -->
+            <img src="map-placeholder.png" alt="Map of North Carolina">
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div id="table-placeholder"></div>
+        <script>
+            $(document).ready(function(){
+                $("#table-placeholder").load("../table/2020-2022_NC_Income_FMR_Data.html");
+            });
+        </script>
+    </div>
+
+</body>
+</html>
