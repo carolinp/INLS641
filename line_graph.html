@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <h1>Rent Compared to Per Capita Personal Income</h1>
+    <div>
+        <label for = "countyDropdown"> Select County </label>
+        <select id="county-select" multiple></select>
+    </div>
+    <div>
+        <label for = "bedroom-select">Select Bedroom Type:</label>
+        <select id = "bedroom-select" multiple>
+            <option value="studio">Studio</option>
+            <option value="one_bedroom">One Bedroom</option>
+            <option value="two_bedroom">Two Bedroom</option>
+            <option value="three_bedroom">Three Bedroom</option>
+            <option value="four_bedroom">Four Bedroom</option>
+        </select>
+    </div>
+    <svg width = "960" height = "500"></svg>
+
+
+<script>
+
+function parseCSV(filePath, callback) {
+            Papa.parse(filePath, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    callback(results.data);
+                }
+            });
+        }
+
+    const fmrFile = 'FMR.csv';
+    const incomeFile = 'Income.csv';  
+    parseCSV(fmrFile, function(fmrData) {
+            // Extract data for fmr_0 to fmr_4
+            const fmr0 = fmrData.map(row => row.fmr_0);
+            const fmr1 = fmrData.map(row => row.fmr_1);
+            const fmr2 = fmrData.map(row => row.fmr_2);
+            const fmr3 = fmrData.map(row => row.fmr_3);
+            const fmr4 = fmrData.map(row => row.fmr_4);
+            const years = fmrData.map(row => row.year); 
+            console.log(fmrData);
+    }),
+    
+            function(incomeData) {
+                const income = incomeData.map(row => row.per_capita_personal_income);
+            console.log(incomeData);
+        }
+
+const svg = d3.select("svg"),
+    margin = { top: 20, right: 20, bottom: 30, left: 50 },
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+const x = d3.scaleTime().range([0, width]);
+const y = d3.scaleLinear().range([height, 0]);
+
+const line = d3.line()
+    .x(d => x(d.year))
+    .y(d => y(d.value));
+
+
+x.domain(d3.extent(parsedData, d => d.year));
+y.domain([0, d3.max(parsedData, d => d.value)]);
+
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y));
+
+
+const types = ["studio", "one_bedroom", "two_bedroom", "three_bedroom", "four_bedroom"];
+types.forEach(type => {
+    g.append("path")
+        .datum(parsedData.filter(d => d.type === type))
+        .attr("class", "line")
+        .attr("d", line)
+        .style("stroke", () => d3.schemeCategory10[types.indexOf(type)]);
+});
+
+const updateGraph = () => {
+    const selectedCounties = Array.from(document.getElementById("county-select").selectedOptions).map(option => option.value);
+    const selectedTypes = Array.from(document.getElementById("bedroom-select").selectedOptions).map(option => option.value);
+
+    const filteredData = parsedData.filter(d => selectedCounties.includes(d.county) && selectedTypes.includes(d.type));
+
+    y.domain([0, d3.max(filteredData, d => d.value)]);
+
+    g.selectAll(".line").remove();
+
+    selectedTypes.forEach(type => {
+        g.append("path")
+            .datum(filteredData.filter(d => d.type === type))
+            .attr("class", "line")
+            .attr("d", line)
+            .style("stroke", () => d3.schemeCategory10[types.indexOf(type)]);
+    });
+
+    g.select(".axis--y").call(d3.axisLeft(y));
+};
+
+document.getElementById("county-select").addEventListener("change", updateGraph);
+document.getElementById("bedroom-select").addEventListener("change", updateGraph);
+
+
+</script>
+</body>
+</html>
+
+
+
+
+<!--  Steps To Take/Things to Figure out 
+        1. Anything that needs to be included at the top (refer to assignments for anything)
+        2. Any CSS that needs to be included in the code (refer to the "style" section of assignments)
+        3. Importing the CSV files of data 
+        4. The code that is needed to create the structure of the graph - ie: defining the X and Y axis, the size of the graph, etc.
+        5. The codethat is needed to create the strucute for the line (refer to D3 documentation on line graph for this)
+        6. The code that is needed to constrain the line inside the graph (refer to prevoius assignment examples for this or use CGPT)
+        7. The code that is needed to actually draw the lines on the graph 
+        8. The code that is needed for a pop up window to appear with information (refer to A5, 6, or 8)
+        9. The code that is needed to filter data - filter by county/city area
+        10. The code that is needed to draw statistical analyses (refer to A8 and documentation from smple statistics)
+        11. Code to create any animations or interactions 
+        12. Anything else I am missing - add here so I have it broken down by steps 
+-->
+</html>
