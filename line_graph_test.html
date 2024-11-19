@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Line Graph with Axis Labels</title>
+    <!-- Importing the D3 library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <script>
+        // Your datasets
+
+        let fmr_0 = [
+            {County: Alamance ,2025: 869, 2024: 828,2023: 714,2022: 619,2021: 636,2020: 601}, 
+            {County: Alexander ,2025: 818, 2024: 806,2023: 646, 2022: 589,2021: 557,2020: 569}, 
+            {County: Alleghany ,2025: 717,2024: 651,2023: 589,2022: 557,2021: 522,2020: 506}, 
+            {County: Anson ,2025: 834,2024: 751,2023: 645, 2022: 535,2021: 534,2020: 573}, 
+            {County: Ashe ,2025: 713,2024: 674,2023: 619,2022: 569, 2021: 531,2020: 506}, 
+            {County: Avery ,2025: 798,2024: 776,2023: 706,2022: 645,2021: 595,2020: 562}, 
+            {County: Beaufort ,2025: 759,2024: 668,2023: 623,2022: 571,2021: 579,2020: 547}, 
+            {County: Bertie,2025: 797,2024: 683,2023: 582,2022: 547,2021: 530,2020: 573
+            {County: Bladen ,2025: 704,2024: 687,2023: 617,2022: 547,2021: 522,2020: 506
+            {County:Brunswick ,2025: 1057,2024: 951,2023: 820,2022: 786,2021: 698,2020: 664
+            {County:Buncombe ,1286,1428,1270,1188,1096,821
+            {County: Burke ,818,806,646,589,557,569
+            {County:Cabarrus ,1586,1347,1154,996,987,907
+            {County:Caldwell ,818,806,646,589,557,569
+            {County:Camden ,982,787,704,782,868,859
+            {County:Carteret ,923,820,757,692,638,624
+            {County:Caswell ,780,713,635,589,589,573
+            {County:Catawba ,818,806,646,589,557,569
+            {County:Chatham ,1548,1385,1128,1024,972,919
+            {County:Cherokee,714,659,613,579,545,513
+            {County:Chowan ,854,787,737,681,643,629
+            {County:Clay ,856,775,695,668,661,614
+            {County:Cleveland ,705,652,582,504,494,496
+            {County:Columbus,710,647,582,547,547,527
+            {County:Craven ,996,928,829,764,728,702
+            {County:Cumberland ,1078,1120,898,771,726,719
+            {County:Currituck,1475,1279,1116,993,960,952
+            {County:Dare ,1090,1000,915,866,837,785
+            {County:Davidson,790,768,656,553,558,572
+            {County:Davie ,945,897,774,623,624,580
+            {County:Duplin ,739,683,623,556,527,506
+            {County:Durham ,1548,1385,1128,1024,972,919
+            {County:Edgecombe ,855,825,712,625,600,568
+            {County:Forsyth ,945,897,774,623,624,580
+            {County:Franklin ,1533,1427,1213,1038,1013,962
+            {County:Gaston ,1586,1347,1154,996,987,907
+            {County:Gates ,1069,905,779,663,622,585
+            {County:Graham ,780,713,582,547,536,560
+            {County:Granville,1140,1013,865,666,626,617
+            {County:Greene ,746,665,582,547,522,506
+            {County:Guilford ,999,1011,893,810,722,686
+            {County:Halifax ,638,600,564,614,564,555
+            {County:Harnett ,791,851,712,646,595,592
+            {County:Haywood ,987,1068,686,637,587,652
+            {County:Henderson ,1286,1428,1270,1188,1096,821
+            {County:Hertford ,682,661,640,619,579,562
+            {County:Hoke ,747,793,657,642,617,608
+            {County: Hyde ,765,705,629,587,594,659
+            {County: Iredell ,1206,1046,896,798,791,748
+            {County:Jackson ,836,776,674,626,615,583
+            {County:Johnston ,1533,1427,1213,1038,1013,962
+            {County:Jones ,751,670,582,547,549,522
+            {County:Lee ,922,842,736,671,660,625
+            {County:Lenoir ,735,650,582,505,515,505
+            {County:Lincoln,1018,944,794,669,678,654
+            {County:McDowell,780,713,541,593,584,569
+            {County:Macon,722,802,725,660,621,586
+            {County:Madison,1286,1428,1270,1188,1096,821
+            {County:Martin ,704,683,607,558,538,506
+            {County:Mecklenburg ,1586,1347,1154,996,987,907
+            {County:Mitchell ,704,647,582,547,522,507
+            {County:Montgomery ,760,691,607,558,533,530
+            {County:Moore ,986,863,774,695,643,666
+            {County:Nash ,855,825,712,625,600,568
+            {County:New Hanover ,1083,1027,853,814,754,675
+            {County:Northampton,777,719,650,572,522,506
+            {County:Onslow ,879,904,667,634,691,704
+            {County:Orange ,1548,1385,1128,1024,972,919
+            {County:Pamlico ,900,860,762,639,624,589
+            {County:Pasquotank ,903,717,626,581,576,585
+            {County:Pender ,740,752,683,645,610,547
+            {County:Perquimans,753,794,683,651,656,657
+            {County:Person,790,718,636,589,571,545
+            {County:Pitt,878,925,813,730,700,616
+            {County:Polk ,836,787,757,710,626,564
+            {County:Randolph ,999,1011,893,810,722,686
+            {County: Richmond ,767,720,642,624,594,573
+            {County:Robeson ,718,645,582,547,505,477
+            {County:Rockingham,714,633,545,581,534,511
+            {County:Rowan,1044,925,800,707,715,653
+            {County:Rutherford,803,733,643,563,522,506
+            {County:Sampson,709,684,606,547,522,509
+            {County:Scotland,788,706,582,547,522,506
+            {County:Stanly,672,627,560,517,571,534
+            {County:Stokes,945,897,774,623,624,580
+            {County:Surry,704,672,614,583,541,510
+            {County:Swain,757,652,617,575,589,573
+            {County:Transylvania,871,853,751,706,532,567
+            {County:Tyrrell,744,713,695,651,585,543
+            {County:Union,1586,1347,1154,996,987,907
+            {County:Vance,774,707,644,631,540,469
+            {County:Wake,1533,1427,1213,1038,1013,962
+            {County:Warren,704,647,584,555,522,530
+            {County:Washington,704,647,617,575,551,506
+            {County:Watauga,874,777,720,665,609,591
+            {County:Wayne,897,826,693,641,623,612
+            {County:Wilkes,780,713,635,589,539,506
+            {County:Wilson,795,645,554,595,661,638
+            {County:Yadkin,945,897,774,623,624,580
+            {County:Yancey,704,647,555,528,505,514
+        ]
+        let fmr_0_data = [
+            {County: "Alamance", 2025: 869, 2024: 828, 2023: 714, 2022: 619, 2021: 636, 2020: 601},
+            {County: "Alexander", 2025: 818, 2024: 806, 2023: 646, 2022: 589, 2021: 557, 2020: 569},
+            {County: "Alleghany", 2025: 717, 2024: 651, 2023: 589, 2022: 557, 2021: 522, 2020: 506},
+            {County: "Anson", 2025: 834, 2024: 751, 2023: 645, 2022: 535, 2021: 534, 2020: 573},
+            {County: "Ashe", 2025: 713, 2024: 674, 2023: 619, 2022: 569, 2021: 531, 2020: 506},
+            {County: "Beaufort", 2025: 759, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562}, 
+            {County: "Bertie", 2025: 797, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562},
+            {County: "Bladen", 2025: 704, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562},
+            {County: "Brunswick", 2025: 1057, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562},
+            {County: "Buncombe", 2025: 798, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562},
+            {County: "Burke", 2025: 798, 2024: 776, 2023: 706, 2022: 645, 2021: 595, 2020: 562},
+        ];
+
+        let fmr_1_data = [
+            {County: "Alamance", 2025: 1099, 2024: 1043, 2023: 837, 2022: 698, 2021: 682, 2020: 659},
+            {County: "Alexander", 2025: 851, 2024: 834, 2023: 650, 2022: 592, 2021: 560, 2020: 573},
+            {County: "Alleghany", 2025: 722, 2024: 655, 2023: 593, 2022: 561, 2021: 526, 2020: 509},
+            {County: "Anson", 2025: 927, 2024: 843, 2023: 732, 2022: 612, 2021: 537, 2020: 577},
+            {County: "Ashe", 2025: 717, 2024: 678, 2023: 623, 2022: 573, 2021: 535, 2020: 509},
+            {County: "Avery", 2025: 803, 2024: 781, 2023: 711, 2022: 649, 2021: 599, 2020: 566}
+        ];
+
+
+        // Extract years and convert to a list
+        let years = [2020, 2021, 2022, 2023, 2024, 2025];
+
+        // Setting up the SVG canvas dimensions
+        let margin = {top: 20, right: 30, bottom: 50, left: 70},
+            width = 800 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+        // Append the SVG object to the body
+        let svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Function to transform the dataset into a usable format for line generation
+        function transformData(data) {
+            return years.map(year => {
+                return {year: year, value: d3.mean(data, d => d[year])};
+            });
+        }
+
+        let line1Data = transformData(fmr_0_data);
+        let line2Data = transformData(fmr_1_data);
+
+        // Set up scales
+        let xScale = d3.scaleLinear()
+            .domain(d3.extent(years))
+            .range([0, width]);
+
+        let yScale = d3.scaleLinear()
+            .domain([0, d3.max([line1Data, line2Data], d => d3.max(d, p => p.value))])
+            .nice()
+            .range([height, 0]);
+
+        // Define the line generators
+        let lineGenerator = d3.line()
+            .x(d => xScale(d.year))
+            .y(d => yScale(d.value));
+
+        // Append line for the first dataset
+        svg.append("path")
+            .datum(line1Data)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("d", lineGenerator);
+
+        // Append line for the second dataset
+        svg.append("path")
+            .datum(line2Data)
+            .attr("fill", "none")
+            .attr("stroke", "orange")
+            .attr("stroke-width", 2)
+            .attr("d", lineGenerator);
+
+        // Adding X Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+        // Adding Y Axis
+        svg.append("g")
+            .call(d3.axisLeft(yScale));
+
+        // Adding X-axis Label
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + margin.bottom - 10)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .text("Year");
+
+        // Adding Y-axis Label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", -margin.left + 20)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .text("Value");
+    </script>
+</body>
+</html>

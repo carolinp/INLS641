@@ -1,0 +1,53 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.top-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.line-chart, .map {
+    flex: 1 1 45%;
+    margin: 10px;
+}
+
+.line-chart img, .map img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+}
+
+.table-container {
+    margin: 20px;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/*
+.table-container th, 
+.table-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table-container th {
+    background-color: #f2f2f2;
+}
+
+.table-container tr:nth-child(even) {
+    background-color: #fafafa;
+}
+*/
+
+h2 {
+    margin-top: 0;
+}
