@@ -51,3 +51,20 @@ body {
 h2 {
     margin-top: 0;
 }
+
+.county {
+    stroke: #fff;
+    stroke-width: 1px;
+}
+#details {
+    position: absolute;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid black;
+    opacity: 0;
+}
+.selected {
+    stroke: black;
+    stroke-width: 2px;
+    z-index: 100;
+}
