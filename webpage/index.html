@@ -9,7 +9,7 @@
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-    <script src="map.js"></script>
+    <!--<script src="map.js"></script>-->
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -109,8 +109,21 @@
           .style("opacity", 1);
           //add the selected class to the clicked county
           d3.select(this).classed("selected", true);
+          HighlightTable(this.id);
         })
       }
+    function HighlightTable(county){
+        var rowId = county + " County";
+        var table = document.getElementById("combinedTable");
+        var rows = table.getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].id == rowId) {
+                rows[i].style.backgroundColor = "#c6dbef";
+            } else {
+                rows[i].style.backgroundColor = "initial";
+            }
+        }
+    }
         </script>
     </div>
 

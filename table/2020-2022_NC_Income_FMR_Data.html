@@ -7,14 +7,14 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 </head>
 <body>
-    <h2>2020-2022 NC Income and Fair Market Rent Data</h2>
+    <h2>2022 NC Income and Fair Market Rent Data</h2>
     <label for="yearFilter">Filter by Year:</label>
-    <select id="yearFilter">
+    <!--<select id="yearFilter">
         <option value="">All</option>
         <option value="2020">2020</option>
         <option value="2021">2021</option>
         <option value="2022">2022</option>
-    </select>
+    </select>-->
 
     <table id="combinedTable" class="display" width="100%"></table>
 
@@ -3039,11 +3039,13 @@
              data2022.forEach(entry => entry.Year = 2022);
  
              // Combine data for display
-             const combinedData = [...data2020, ...data2021, ...data2022];
+             //const combinedData = [...data2020, ...data2021, ...data2022];
  
              // Initialize DataTable
              const table = $('#combinedTable').DataTable({
-                 data: combinedData,
+                 data: data2022,
+                 pageLength: 100,
+                 rowId: 'County',
                  columns: [
                      { title: "County", data: "County" },
                      { title: "Year", data: "Year" },
@@ -3057,14 +3059,14 @@
              });
  
              // Filter by year
-             $('#yearFilter').on('change', function() {
-                 const selectedYear = $(this).val();
-                 if (selectedYear) {
-                     table.column(1).search('^' + selectedYear + '$', true, false).draw();
-                 } else {
-                     table.column(1).search('').draw();
-                 }
-             });
+             //$('#yearFilter').on('change', function() {
+             //    const selectedYear = $(this).val();
+             //    if (selectedYear) {
+             //        table.column(1).search('^' + selectedYear + '$', true, false).draw();
+             //    } else {
+            //         table.column(1).search('').draw();
+             //    }
+            // });
          });
      </script>
  </body>
