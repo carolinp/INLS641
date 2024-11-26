@@ -86,11 +86,22 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 function filterDataByCounty(data, selectedCounty) {
-    return data.filter(d => d.County === selectedCounty);
+    if (!data || data.length === 0) {
+        console.error("No data available to filter.");
+        return [];
+    }
+    console.log("Filtering data for county:", selectedCounty);
+    const result = data.filter(d => d.County === selectedCounty);
+    console.log("Filtered Data for County:", selectedCounty, result); // Debug log
+    return result;
 }
 function updateGraphBasedOnCounty() {
-            const countySelect = document.getElementById("county-select");
-            const selectedCounty = countySelect.value; 
+    if (!combinedData || combinedData.length === 0) {
+        console.error("combinedData is not yet populated.");
+        return;
+    }     
+    const CountySelect = document.getElementById("County-select");
+            const selectedCounty = CountySelect.value; 
             console.log("Selected County:", selectedCounty); 
             const filteredData = filterDataByCounty(combinedData, selectedCounty);
             drawGraph(filteredData);
@@ -134,8 +145,8 @@ function populateBedroomTypeCheckboxes() {
 
             console.log("Selected Bedroom Types:", selectedBedroomTypes);
 
-const filteredData = combinedData.filter(county => {
-    return selectedBedroomTypes.some(type => county[type])
+const filteredData = combinedData.filter(County => {
+    return selectedBedroomTypes.some(type => County[type])
 });
 
 if (selectedBedroomTypes.length === 0) {
@@ -224,8 +235,10 @@ function drawGraph(data) {
     }
 
         //Loading and combining all data 
-    Promise.all(filePaths.map(d => parseCSV(d.path))).then(datasets => {
-            const combinedData = [];
+        let combinedData; 
+
+        Promise.all(filePaths.map(d => parseCSV(d.path))).then(datasets => {
+            combinedData = [];
             const yearRange = Array.from({ length: 11 }, (_, i) => 2015 + i);
            
     // Iterate over each dataset (fmr_0, fmr_1, income, etc.)
@@ -237,9 +250,6 @@ function drawGraph(data) {
 
             filePaths.forEach((file, i) => {
                 const dataset = datasets[i];
-
-                //console.log("Income Dataset Sample:", datasets[filePaths.findIndex(f => f.key === "income")][0]);
-                
                 const matchingRow = dataset.find(d => 
                     d["County"]?.trim().toLowerCase() === row["County"]?.trim().toLowerCase()
                         );
@@ -268,7 +278,7 @@ function drawGraph(data) {
    const defaultCounty = combinedData[0].County;
    const defaultData = filterDataByCounty(combinedData, defaultCounty);
    drawGraph(defaultData); 
-   document.getElementById("county-select").addEventListener("change", updateGraphBasedOnCounty);
+   document.getElementById("County-select").addEventListener("change", updateGraphBasedOnCounty);
 }).catch(error => console.error("Error loading data:", error));
 
 
