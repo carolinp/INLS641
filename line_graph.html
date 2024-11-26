@@ -9,23 +9,27 @@
 </head>
 <body>
     <h1>Rent Compared to Per Capita Personal Income</h1>
-    <div>
-        <label for="County-select">Select Counties:</label>
+    <div style="display: inline-block; vertical-align: top; margin-right: 20px; padding-right: 50px; padding-bottom: 50px;">
+        <label for="County-select">Select County:</label><br>
         <select id="County-select" multiple style="width: 200px; height: 100px;"></select>
     </div>
-    <div><label for = "bedroom-select">Select Bedroom Type:</label> <br></div>
-    <div>
-        <label><input type="checkbox" value="fmr_0" id="fmr_0"> FMR 0</label><br>
-        <label><input type="checkbox" value="fmr_1" id="fmr_1"> FMR 1</label><br>
-        <label><input type="checkbox" value="fmr_2" id="fmr_2"> FMR 2</label><br>
-        <label><input type="checkbox" value="fmr_3" id="fmr_3"> FMR 3</label><br>
-        <label><input type="checkbox" value="fmr_4" id="fmr_4"> FMR 4</label><br>
+    <div style="display: inline-block; vertical-align: top; padding-left: 50px; padding-bottom: 50px;">
+        <div><label for = "bedroom-select">Select Bedroom Type:</label> <br></div>
+        <div>
+            <label><input type="checkbox" value="fmr_0" id="fmr_0"> FMR 0</label><br>
+            <label><input type="checkbox" value="fmr_1" id="fmr_1"> FMR 1</label><br>
+            <label><input type="checkbox" value="fmr_2" id="fmr_2"> FMR 2</label><br>
+            <label><input type="checkbox" value="fmr_3" id="fmr_3"> FMR 3</label><br>
+            <label><input type="checkbox" value="fmr_4" id="fmr_4"> FMR 4</label><br>
+        </div>
     </div>
+
+    <br>
     <svg width = "960" height = "500"></svg>
 
     <script>
         //console.log("JavaScript is running ...")
-        // Global variables for data
+       //global variables
         let fmr0Data = [];
         let fmr1Data = [];
         let fmr2Data = [];
@@ -64,19 +68,33 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     function populateCountySelector(data) {
-        console.log("Populating County selector with data:", data);
         const counties = Array.from(new Set(data.map(d => d.County)));
         const CountySelect = document.getElementById("County-select");
         CountySelect.innerHTML = ""; // Clear any existing options
         
-        counties.forEach(County => {
+        counties.forEach((County, index) => {
             const option = document.createElement("option");
             option.value = County;
             option.textContent = County;
+          
+
+            if (index === 0) option.selected = true; 
+
             CountySelect.appendChild(option);
     });
     //console.log("Counties added to selector:", counties); // Debug log
 }
+
+function filterDataByCounty(data, selectedCounty) {
+    return data.filter(d => d.County === selectedCounty);
+}
+function updateGraphBasedOnCounty() {
+            const countySelect = document.getElementById("county-select");
+            const selectedCounty = countySelect.value; 
+            console.log("Selected County:", selectedCounty); 
+            const filteredData = filterDataByCounty(combinedData, selectedCounty);
+            drawGraph(filteredData);
+        }
 
 function populateBedroomTypeCheckboxes() {
             const bedroomTypes = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"]; // You can modify this array with your actual categories
@@ -130,6 +148,7 @@ if (selectedBedroomTypes.length === 0) {
 function drawGraph(data) {
         //console.log("Data passed to drawGraph:", data);
         d3.select("svg").selectAll("*").remove();
+
         const svg = d3.select("svg"),
             margin = { top: 20, right: 20, bottom: 30, left: 50 },
             width = +svg.attr("width") - margin.left - margin.right,
@@ -156,7 +175,6 @@ function drawGraph(data) {
             //console.log("X Domain:", x.domain());
             //console.log("Y Domain: ", y.domain());
 
-    // Append axes
         g.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", `translate(0,${height})`)
@@ -173,8 +191,8 @@ function drawGraph(data) {
             .defined(d => d.value !==null);
 
     // Draw lines for each County
-    data.forEach(County => {
-    const CountyName = County.County; // Track the County name
+         data.forEach(County => {
+            const CountyName = County.County; // Track the County name
 
     Object.keys(County)
         .filter(y => y !== "County") // Exclude the "County" property
@@ -247,7 +265,10 @@ function drawGraph(data) {
 
    // console.log("Final Combined Data:", combinedData); // Debug log
    populateCountySelector(combinedData);
-   drawGraph(combinedData); 
+   const defaultCounty = combinedData[0].County;
+   const defaultData = filterDataByCounty(combinedData, defaultCounty);
+   drawGraph(defaultData); 
+   document.getElementById("county-select").addEventListener("change", updateGraphBasedOnCounty);
 }).catch(error => console.error("Error loading data:", error));
 
 
