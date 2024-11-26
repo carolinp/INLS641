@@ -10,116 +10,273 @@
 <body>
     <h1>Rent Compared to Per Capita Personal Income</h1>
     <div>
-        <label for = "countyDropdown"> Select County </label>
-        <select id="county-select" multiple></select>
+        <label for="County-select">Select Counties:</label>
+        <select id="County-select" multiple style="width: 200px; height: 100px;"></select>
     </div>
+    <div><label for = "bedroom-select">Select Bedroom Type:</label> <br></div>
     <div>
-        <label for = "bedroom-select">Select Bedroom Type:</label>
-        <select id = "bedroom-select" multiple>
-            <option value="studio">Studio</option>
-            <option value="one_bedroom">One Bedroom</option>
-            <option value="two_bedroom">Two Bedroom</option>
-            <option value="three_bedroom">Three Bedroom</option>
-            <option value="four_bedroom">Four Bedroom</option>
-        </select>
+        <label><input type="checkbox" value="fmr_0" id="fmr_0"> FMR 0</label><br>
+        <label><input type="checkbox" value="fmr_1" id="fmr_1"> FMR 1</label><br>
+        <label><input type="checkbox" value="fmr_2" id="fmr_2"> FMR 2</label><br>
+        <label><input type="checkbox" value="fmr_3" id="fmr_3"> FMR 3</label><br>
+        <label><input type="checkbox" value="fmr_4" id="fmr_4"> FMR 4</label><br>
     </div>
     <svg width = "960" height = "500"></svg>
 
-
-<script>
-
-function parseCSV(filePath, callback) {
-            Papa.parse(filePath, {
+    <script>
+        //console.log("JavaScript is running ...")
+        // Global variables for data
+        let fmr0Data = [];
+        let fmr1Data = [];
+        let fmr2Data = [];
+        let fmr3Data = [];
+        let fmr4Data = [];
+        let incomeData = [];
+        
+        // Function to parse CSV files
+        function parseCSV(filePath) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(filePath, {
                 download: true,
                 header: true,
                 complete: function(results) {
-                    callback(results.data);
+                    //console.log(`Parsed ${filePath}:`, results.data);
+                    resolve(results.data);  
+            },
+                error: function (error) {
+                    reject(error)
                 }
+                    
+                });
+            });
+        }
+        
+        // File paths
+        const filePaths = [
+            {key: "fmr_0", path: "./fmr_0.csv"},
+            {key: "fmr_1", path: "./fmr_1.csv"},
+            {key: "fmr_2", path: "./fmr_2.csv"},
+            {key: "fmr_3", path: "./fmr_3.csv"},
+            {key: "fmr_4", path: "./fmr_4.csv"},
+            {key: "income", path: "./Income.csv"},
+        ]
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    function populateCountySelector(data) {
+        console.log("Populating County selector with data:", data);
+        const counties = Array.from(new Set(data.map(d => d.County)));
+        const CountySelect = document.getElementById("County-select");
+        CountySelect.innerHTML = ""; // Clear any existing options
+        
+        counties.forEach(County => {
+            const option = document.createElement("option");
+            option.value = County;
+            option.textContent = County;
+            CountySelect.appendChild(option);
+    });
+    //console.log("Counties added to selector:", counties); // Debug log
+}
+
+function populateBedroomTypeCheckboxes() {
+            const bedroomTypes = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"]; // You can modify this array with your actual categories
+            const checkboxContainer = document.getElementById("bedroom-types");
+
+            checkboxContainer.innerHTML = ""; // Clear existing checkboxes
+        
+            bedroomTypes.forEach(type => {
+                const label = document.createElement("label");
+                const input = document.createElement("input");
+                input.type = "checkbox";
+                input.id = type;
+                input.value = type;
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(type));
+
+                checkboxContainer.appendChild(label);
+                checkboxContainer.appendChild(document.createElement("br"));
+            });
+
+            // Add event listener to update graph when checkboxes are toggled
+            bedroomTypes.forEach(type => {
+                document.getElementById(type).addEventListener("change", updateGraphBasedOnCheckboxes);
             });
         }
 
-    const fmrFile = 'FMR.csv';
-    const incomeFile = 'Income.csv';  
-    parseCSV(fmrFile, function(fmrData) {
-            // Extract data for fmr_0 to fmr_4
-            const fmr0 = fmrData.map(row => row.fmr_0);
-            const fmr1 = fmrData.map(row => row.fmr_1);
-            const fmr2 = fmrData.map(row => row.fmr_2);
-            const fmr3 = fmrData.map(row => row.fmr_3);
-            const fmr4 = fmrData.map(row => row.fmr_4);
-            const years = fmrData.map(row => row.year); 
-            console.log(fmrData);
-    }),
-    
-            function(incomeData) {
-                const income = incomeData.map(row => row.per_capita_personal_income);
-            console.log(incomeData);
-        }
+        // Function to update the graph based on selected checkboxes
+        function updateGraphBasedOnCheckboxes() {
+            // Get selected bedroom types from checkboxes
+            const selectedBedroomTypes = [];
+            const bedroomTypes = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"];
+            bedroomTypes.forEach(type => {
+                if (document.getElementById(type).checked) {
+                    selectedBedroomTypes.push(type);
+                }
+            });
 
-const svg = d3.select("svg"),
-    margin = { top: 20, right: 20, bottom: 30, left: 50 },
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+            console.log("Selected Bedroom Types:", selectedBedroomTypes);
 
-
-const x = d3.scaleTime().range([0, width]);
-const y = d3.scaleLinear().range([height, 0]);
-
-const line = d3.line()
-    .x(d => x(d.year))
-    .y(d => y(d.value));
-
-
-x.domain(d3.extent(parsedData, d => d.year));
-y.domain([0, d3.max(parsedData, d => d.value)]);
-
-
-g.append("g")
-    .attr("class", "axis axis--x")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x));
-
-g.append("g")
-    .attr("class", "axis axis--y")
-    .call(d3.axisLeft(y));
-
-
-const types = ["studio", "one_bedroom", "two_bedroom", "three_bedroom", "four_bedroom"];
-types.forEach(type => {
-    g.append("path")
-        .datum(parsedData.filter(d => d.type === type))
-        .attr("class", "line")
-        .attr("d", line)
-        .style("stroke", () => d3.schemeCategory10[types.indexOf(type)]);
+const filteredData = combinedData.filter(county => {
+    return selectedBedroomTypes.some(type => county[type])
 });
 
-const updateGraph = () => {
-    const selectedCounties = Array.from(document.getElementById("county-select").selectedOptions).map(option => option.value);
-    const selectedTypes = Array.from(document.getElementById("bedroom-select").selectedOptions).map(option => option.value);
+if (selectedBedroomTypes.length === 0) {
+                drawGraph(combinedData); // Show all data if no filter is applied
+            } else {
+                drawGraph(filteredData); // Redraw the graph with filtered data
+            }
+}
 
-    const filteredData = parsedData.filter(d => selectedCounties.includes(d.county) && selectedTypes.includes(d.type));
+function drawGraph(data) {
+        //console.log("Data passed to drawGraph:", data);
+        d3.select("svg").selectAll("*").remove();
+        const svg = d3.select("svg"),
+            margin = { top: 20, right: 20, bottom: 30, left: 50 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+    
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    //defining x and y scales 
+        const x = d3.scaleLinear()
+            .domain([2015,2025])
+            .range([0, width]);
+    
+        const y = d3.scaleLinear()
+            .domain([
+                0, 
+                d3.max(data, County =>
+                    d3.max(Object.values(County), yearData =>
+                        d3.max(Object.values(yearData))
+                    )
+                )
+            ])
+            .range([height, 0]);
 
-    y.domain([0, d3.max(filteredData, d => d.value)]);
+            //console.log("X Domain:", x.domain());
+            //console.log("Y Domain: ", y.domain());
 
-    g.selectAll(".line").remove();
+    // Append axes
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickFormat(d3.format("d"))); 
 
-    selectedTypes.forEach(type => {
-        g.append("path")
-            .datum(filteredData.filter(d => d.type === type))
-            .attr("class", "line")
-            .attr("d", line)
-            .style("stroke", () => d3.schemeCategory10[types.indexOf(type)]);
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y));
+        
+    //line generator
+        const line = d3.line()
+            .x(d => x(d.year))
+            .y(d => y(d.value))
+            .defined(d => d.value !==null);
+
+    // Draw lines for each County
+    data.forEach(County => {
+    const CountyName = County.County; // Track the County name
+
+    Object.keys(County)
+        .filter(y => y !== "County") // Exclude the "County" property
+        .forEach(year => {
+            const yearData = County[year];
+
+            Object.keys(yearData).forEach(datasetKey => {
+                const lineData = Object.keys(County)
+                    .filter(y => y !== "County") // Exclude "County"
+                    .map(y => ({
+                        year: +y,
+                        value: County[y][datasetKey]
+                    }))
+                    .filter(d => d.value !== null); // Exclude null values
+
+                // Draw line if there are valid points
+                if (lineData.length > 1) {
+                    g.append("path")
+                        .datum(lineData)
+                        .attr("class", "line")
+                        .attr("d", line)
+                        .style("stroke", d3.schemeCategory10[Object.keys(yearData).indexOf(datasetKey) % 10])
+                        .style("stroke-width", 2)
+                        .style("fill", "none");
+                }
+            });
+        });
+});
+    }
+
+        //Loading and combining all data 
+    Promise.all(filePaths.map(d => parseCSV(d.path))).then(datasets => {
+            const combinedData = [];
+            const yearRange = Array.from({ length: 11 }, (_, i) => 2015 + i);
+           
+    // Iterate over each dataset (fmr_0, fmr_1, income, etc.)
+        datasets[0].forEach(row => { 
+            const CountyData = { County: row["County"] };
+
+        yearRange.forEach(year => {
+            CountyData[year] = {};
+
+            filePaths.forEach((file, i) => {
+                const dataset = datasets[i];
+
+                //console.log("Income Dataset Sample:", datasets[filePaths.findIndex(f => f.key === "income")][0]);
+                
+                const matchingRow = dataset.find(d => 
+                    d["County"]?.trim().toLowerCase() === row["County"]?.trim().toLowerCase()
+                        );
+                    
+                    CountyData[year][file.key] = matchingRow ? +matchingRow[year.toString()] : null;
+
+                    const yearValue = matchingRow ? matchingRow[year.toString().trim()] : undefined;
+                     //console.log(`Year Value for County: ${row["County"]}, Year: ${year}, Dataset: ${file.key}`, yearValue);
+                    
+                    if (file.key === "income") {
+                        if (year < 2022) {
+                            CountyData[year][file.key] = matchingRow ? +matchingRow[year.toString()] : null;
+                        } else {
+                            CountyData[year][file.key] = null;
+                        }} else {
+                            CountyData[year][file.key] = matchingRow ? +matchingRow[year.toString()] : null;
+                        }
+            });
+        });
+
+        combinedData.push(CountyData);
     });
 
-    g.select(".axis--y").call(d3.axisLeft(y));
-};
+   // console.log("Final Combined Data:", combinedData); // Debug log
+   populateCountySelector(combinedData);
+   drawGraph(combinedData); 
+}).catch(error => console.error("Error loading data:", error));
 
-document.getElementById("county-select").addEventListener("change", updateGraph);
-document.getElementById("bedroom-select").addEventListener("change", updateGraph);
 
 
-</script>
+
+});
+
+
+
+
+        // Load data
+    
+
+
+   
+
+        //    function updateGraph() {
+        //    if (fmr0Data.length === 0 || fmr1Data.length === 0 || incomeData.length === 0)
+        //    return;
+     //   }
+
+
+
+
+
+   
+        </script>
+        
+
 </body>
 </html>
 
@@ -135,9 +292,8 @@ document.getElementById("bedroom-select").addEventListener("change", updateGraph
         6. The code that is needed to constrain the line inside the graph (refer to prevoius assignment examples for this or use CGPT)
         7. The code that is needed to actually draw the lines on the graph 
         8. The code that is needed for a pop up window to appear with information (refer to A5, 6, or 8)
-        9. The code that is needed to filter data - filter by county/city area
+        9. The code that is needed to filter data - filter by County/city area
         10. The code that is needed to draw statistical analyses (refer to A8 and documentation from smple statistics)
         11. Code to create any animations or interactions 
         12. Anything else I am missing - add here so I have it broken down by steps 
 -->
-</html>
