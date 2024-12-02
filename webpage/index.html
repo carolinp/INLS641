@@ -6,11 +6,12 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
-    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-    <!--<script src="map.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <!--<script src="map.js"></script>-->
 </head>
 
 <body>
@@ -18,13 +19,32 @@
         <div class="line-chart">
             <h2>Rent Trends Over Time</h2>
             <!-- Placeholder for line chart -->
-            <img src="line-chart-placeholder.png" alt="Line Chart">
+            <h1>Rent as a Percentage of Per Capita Personal Income from 2015-2022</h1>
+            <div style="display: inline-block; vertical-align: top; padding-right: 20px; padding-bottom: 20px;">
+                <label for="County-select">Select County:</label><br>
+                <select id="County-select" multiple style="width: 200px; height: 100px;"></select>
+            </div>
+            <div style="display: inline-block; vertical-align: top; padding-left: 50px; padding-bottom: 50px;">
+                <div><label for = "bedroom-select">Select Bedroom Type:</label> <br></div>
+                <div>
+                    <label><input type="checkbox" value="fmr_0" id="fmr_0" checked> Studio </label><br>
+                    <label><input type="checkbox" value="fmr_1" id="fmr_1" checked> 1 Bedrom </label><br>
+                    <label><input type="checkbox" value="fmr_2" id="fmr_2" checked> 2 Bedroom </label><br>
+                    <label><input type="checkbox" value="fmr_3" id="fmr_3" checked> 3 Bedroom </label><br>
+                    <label><input type="checkbox" value="fmr_4" id="fmr_4" checked> 4 Bedroom </label><br>
+                </div>
+            </div>
+            <div id = "legend-container" style="vertical-align: top; border: solid; width: fit-content; padding-left: 20px; padding-right: 30px;"></div>
+        
+            <br>
+            <svg width = "960" height = "500"></svg>
+        
         </div>
 
         <div class="map">
             <h2>Rent Prices Across NC</h2>
             <!-- Create an element where the map will take place -->
-            <svg id="my_dataviz" width="900" height="600"></svg>
+            <svg id="map-viz" width="900" height="600"></svg>
             <span id="details"></span>
         </div>
     </div>
@@ -36,9 +56,9 @@
                 $("#table-placeholder").load("../table/2020-2022_NC_Income_FMR_Data.html");
             });
                 // The svg
-    var svg = d3.select("svg"),
-      width = +svg.attr("width"),
-      height = +svg.attr("height");
+    var mapSVG = d3.select("#map-viz"),
+      width = +mapSVG.attr("width"),
+      height = +mapSVG.attr("height");
     
     // Map and projection
     var path = d3.geoPath();
@@ -48,32 +68,47 @@
       .translate([width / 2, height / 2]);
     
     // Data and color scale
-    var data = d3.map();
+    //Create a variable for the data that maps each county to its income and one bedroom rent values using d3 version 7
+    var data = new Map();
+    //console.log(data);
     var colorScale = d3.scaleThreshold()
       .domain([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
       .range(d3.schemeBlues[7]);
     
     // Load external data and boot
-    d3.queue()
-      .defer(d3.json, "data/North_Carolina_State_and_County_Boundary_Polygons.geojson")
-      .defer(d3.csv, "data/2022NCIncome.csv", function(d) { data.set(d.County, { income: +d.Income }); })
-      .defer(d3.csv, "data/2022NCFMR.csv", function(d) { 
+    Promise.all([
+      d3.json("data/North_Carolina_State_and_County_Boundary_Polygons.geojson"),
+      d3.csv("data/2022NCIncome.csv"),
+      d3.csv("data/2022NCFMR.csv")
+    ]).then(function(files) {
+      var geojson = files[0];
+      var mapIncomeData = files[1];
+      var fmrData = files[2];
+
+      mapIncomeData.forEach(function(d) {
+        data.set(d.County, { income: +d.Income });
+      });
+
+      fmrData.forEach(function(d) {
         if (data.has(d.County)) {
           data.get(d.County).oneBR = +d.OneBR;
         } else {
           data.set(d.County, { oneBR: +d.OneBR });
         }
-      })
-      .await(ready);
+      });
 
-    console.log(data);
+      ready(geojson, data);
+    });
+
+
+    //console.log(data);
     
-    function ready(error, topo) {
+    function ready(geojson, data) {
       //console.log(topo.features);
       // Draw the map
-      let counties = svg.append("g")
+      let counties = mapSVG.append("g")
       .selectAll("path")
-      .data(topo.features)
+      .data(geojson.features)
     counties
       .enter()
       .append("path")
@@ -91,7 +126,7 @@
           return colorScale(percentage);
         })
         //on click display the county name and percentage in a tooltip  
-        .on("click", function(d) {
+        .on("click", function(event, d) {
           //remove selected class from all counties
           d3.selectAll(".county").classed("selected", false);
           //unhide the details span
@@ -102,8 +137,8 @@
           d3.select("#details")
           .text(d.properties.County + ": " + (percentage * 100).toFixed(2) + "%")
           //have the details span follow the cursor
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY) + "px")
+          .style("left", (event.pageX) + "px")
+          .style("top", (event.pageY) + "px")
           //.transition()
           //.duration(300)
           .style("opacity", 1);
@@ -124,6 +159,349 @@
             }
         }
     }
+
+/////////////// Line Chart ///////////////
+let fmr0Data = [];
+        let fmr1Data = [];
+        let fmr2Data = [];
+        let fmr3Data = [];
+        let fmr4Data = [];
+        let incomeData = [];
+        
+        function parseCSV(filePath) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(filePath, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    resolve(results.data);  
+            },
+                error: function (error) {
+                    reject(error)
+                }
+                    
+                });
+            });
+        }
+        
+
+        const filePaths = [
+            {key: "fmr_0", path: "data/fmr_0.csv"},
+            {key: "fmr_1", path: "data/fmr_1.csv"},
+            {key: "fmr_2", path: "data/fmr_2.csv"},
+            {key: "fmr_3", path: "data/fmr_3.csv"},
+            {key: "fmr_4", path: "data/fmr_4.csv"},
+            {key: "income", path: "data/Income.csv"},
+        ]
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    function createLegend(categories, colors) {
+        const legendContainer = d3.select("#legend-container");
+
+        legendContainer.html("");
+
+        legendContainer.append("h3")
+            .text("Legend")
+            .style("font-size", "14px")
+            .style("margin-bottom", "10px")
+
+        const labelMapping = {
+            "fmr_0": "Studio",
+            "fmr_1": "1 Bedroom",
+            "fmr_2": "2 Bedroom",
+            "fmr_3": "3 Bedroom",
+            "fmr_4": "4 Bedroom"
+        };
+
+        categories.forEach((category, i) => {
+            const legendItem = legendContainer.append("div") 
+                .style("display", "flex")
+                .style("align-items", "center")
+                .style("margin-bottom", "5px"); 
+
+        legendItem.append("div")
+            .style("width", "15px")
+            .style("height", "15px")
+            .style("background-color", colors[i])
+            .style("margin-right", "10px");
+
+        legendItem.append("span")
+            .text(labelMapping[category] || category)
+            .style("font-size", "12px")
+            .style("color", "black");
+    });
+}
+
+
+
+    function populateCountySelector(data) {
+        const counties = Array.from(new Set(data.map(d => d.County)));
+        const CountySelect = document.getElementById("County-select");
+        CountySelect.innerHTML = ""; 
+        
+        counties.forEach((County, index) => {
+            const option = document.createElement("option");
+            option.value = County;
+            option.textContent = County;
+          
+
+            if (index === 0) option.selected = true; 
+
+            CountySelect.appendChild(option);
+    });
+}
+
+    function filterDataByCounty(data, selectedCounty) {
+        if (!data || data.length === 0) {
+            console.error("No data available to filter.");
+             return [];
+            }
+        const result = data.filter(d => d.County === selectedCounty);
+        return result;
+}
+
+
+    function updateGraphBasedOnCounty() {
+        if (!combinedData || combinedData.length === 0) {
+            console.error("combinedData is not yet populated.");
+            return;
+             }     
+        const CountySelect = document.getElementById("County-select");
+            const selectedCounty = CountySelect.value; 
+            const filteredData = filterDataByCounty(combinedData, selectedCounty);
+            drawGraph(filteredData);
+        }
+        
+
+    function populateBedroomTypeCheckboxes() {
+            const bedroomTypes = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"]; 
+            const checkboxContainer = document.getElementById("bedroom-types");
+
+            checkboxContainer.innerHTML = ""; 
+        
+            bedroomTypes.forEach(type => {
+                const label = document.createElement("label");
+                const input = document.createElement("input");
+                input.type = "checkbox";
+                input.id = type;
+                input.value = type;
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(type));
+
+                checkboxContainer.appendChild(label);
+                checkboxContainer.appendChild(document.createElement("br"));
+            });
+
+            bedroomTypes.forEach(type => {
+                document.getElementById(type).addEventListener("change", updateGraphBasedOnCheckboxes);
+            });
+        }
+
+        
+        function updateGraphBasedOnCheckboxes() {
+            const countySelect = document.getElementById("County-select");
+            const selectedCounty = countySelect.value; 
+            const selectedBedroomTypes = [];
+            const bedroomTypes = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"];
+
+            bedroomTypes.forEach(type => {
+                if (document.getElementById(type).checked) {
+                selectedBedroomTypes.push(type);
+        }
+    });
+
+
+    const filteredData = combinedData
+        .filter(County => County.County === selectedCounty) 
+        .map(County => {
+            const newCounty = { County: County.County };
+            Object.keys(County).forEach(year => {
+                if (year === "County") {
+                    newCounty[year] = County[year];
+                } else {
+                    newCounty[year] = {};
+                    selectedBedroomTypes.forEach(type => {
+                        newCounty[year][type] = County[year][type];
+                    });
+                }
+            });
+            return newCounty;
+        });
+
+    drawGraph(filteredData);
+}
+
+
+
+    function toggleLines() {
+        const checkboxes = document.querySelectorAll("#bedroom-types input[type='checkbox']");
+        checkboxes.forEach(checkbox => {
+            const category = checkbox.value; 
+            const lines = d3.selectAll(`.line${category}`);
+
+            if (checkbox.checked) {
+                lines.style("display", "block"); 
+            } else {
+                lines.style("display", "none");
+            }
+        });
+    }
+
+    Promise.all(filePaths.map(d => parseCSV(d.path))).then(datasets => {
+            combinedData = [];
+            const yearRange = Array.from({ length: 8 }, (_, i) => 2015 + i);
+           
+            datasets[0].forEach(row => { 
+             const CountyData = { County: row["County"] };
+
+            yearRange.forEach(year => {
+             CountyData[year] = {};
+
+             filePaths.forEach((file, i) => {
+                const dataset = datasets[i];
+                const matchingRow = dataset.find(d =>
+                    d["County"]?.trim().toLowerCase() === row["County"]?.trim().toLowerCase()
+                );
+               
+                const yearValue = matchingRow ? +matchingRow[year.toString()] : null;
+                    
+                if (file.key === "income") {
+                    CountyData[year][file.key] = yearValue;
+
+                    if (!yearValue) {
+                        console.warn(`Missing income value for County: ${row["County"]}, Year: ${year}`);
+                    }
+                } 
+            });
+
+            filePaths.forEach((file, i) => {
+                if (file.key !== "income") {
+                    const dataset = datasets[i];
+                    const matchingRow = dataset.find(d =>
+                        d["County"]?.trim().toLowerCase() === row["County"]?.trim().toLowerCase()
+                    );
+
+                    const yearValue = matchingRow ? +matchingRow[year.toString()] : null;
+                    const incomeValue = CountyData[year]["income"]; 
+                    CountyData[year][file.key] = (incomeValue && yearValue)
+                        ? (yearValue / (incomeValue/12)) * 100 
+                        : null;
+
+                    if (CountyData[year][file.key] === null) {
+                        console.warn(`Could not calculate percentage for County: ${row["County"]}, Year: ${year}, Dataset: ${file.key}`);
+                    }
+                }
+            }); 
+        });
+
+        combinedData.push(CountyData);
+    });
+    //console.log("Final Combined Data after Preprocessing:", JSON.stringify(combinedData, null, 2));
+
+   populateCountySelector(combinedData);
+   const defaultCounty = combinedData[0].County;
+   const defaultData = filterDataByCounty(combinedData, defaultCounty);
+   //console.log("Filtered Data for Default County:", JSON.stringify(defaultData, null, 2));
+   drawGraph(defaultData); 
+   document.getElementById("County-select").addEventListener("change", updateGraphBasedOnCounty);
+})//.catch(error => console.error("Error loading data:", error));
+
+    function drawGraph(data) {
+        //console.log("Data passed to drawGraph:", JSON.stringify(data, null, 2));
+        d3.select("svg").select(".graph-content").remove();
+
+        const svg = d3.select("svg"),
+            margin = { top: 20, right: 20, bottom: 30, left: 50 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+
+        const g = svg.append("g")
+            .attr("class", "graph-content")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear()
+            .domain([2015, 2022])
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([0, 100]) 
+            .range([height, 0]);
+
+
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y).tickFormat(d => d + "%"));
+        
+        const line = d3.line()
+            .x(d => x(d.year))
+            .y(d => y(d.value))
+            .defined(d => d.value !== null);
+
+            data.forEach(County => {
+                //console.log("County Data:", County);
+                if (!County || !County.County) {
+                console.warn("Invalid County Data:", County);
+                return;
+                }
+
+        Object.keys(County)
+            .filter(key => key !== "County") 
+            .forEach(year => {
+                const yearData = County[year];
+                console.log(`Year: ${year}, Year Data:`, yearData);
+                if (!yearData) return;
+
+            Object.keys(yearData).forEach(datasetKey => {
+                if (datasetKey !== "income") {
+                        const lineData = Object.keys(County)
+                            .filter(key => key !== "County" && +key >= 2015 && +key <= 2022)
+                            .map(key => ({
+                                year: +key,
+                                value: County[key]?.[datasetKey] || null
+                    }))
+                    .filter(d => d.value !== null); 
+
+                    console.log(`Line Data for ${datasetKey}:`, lineData); 
+                    
+                    if (lineData.length > 1) {
+                    g.append("path")
+                        .datum(lineData)
+                        .attr("class", `line ${datasetKey}`)
+                        .attr("d", line)
+                        .style("stroke", d3.schemeCategory10[categories.indexOf(datasetKey) % 10])
+                        .style("stroke-width", 2)
+                        .style("fill", "none"); 
+                }
+                }
+                
+                    
+            });
+        });
+});     
+    }
+
+
+        let combinedData; 
+
+        const categories = ["fmr_0", "fmr_1", "fmr_2", "fmr_3", "fmr_4"];
+        const colors = d3.schemeCategory10.slice(0, categories.length); 
+        createLegend(categories, colors);
+        document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+                updateGraphBasedOnCheckboxes();
+            });
+             });
+
+
+
+
+});
         </script>
     </div>
 
