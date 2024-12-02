@@ -8,25 +8,28 @@
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
 </head>
 <body>
-    <h1>Rent as a Percentage of Per Capita Personal Income from 2015-2022</h1>
-    <div style="display: inline-block; vertical-align: top; padding-right: 20px; padding-bottom: 20px;">
-        <label for="County-select">Select County:</label><br>
-        <select id="County-select" multiple style="width: 200px; height: 100px;"></select>
-    </div>
-    <div style="display: inline-block; vertical-align: top; padding-left: 50px; padding-bottom: 50px;">
-        <div><label for = "bedroom-select">Select Bedroom Type:</label> <br></div>
-        <div>
+    <h2>Rent as a Percentage of Per Capita Personal Income from 2015-2022</h2>
+    <div style="display: flex; align-items: flex-start; gap: 20px; padding-bottom: 20px; padding-top: 25px;">
+        <div style="display: inline-block;">
+            <label for="County-select">Select County:</label><br>
+            <select id="County-select" multiple style="width: 200px; height: 100px;"></select>
+        </div>
+        <div style="display: inline-block; padding-top: 15px;">
+            <label for="bedroom-select">Select Bedroom Type:</label><br>
             <label><input type="checkbox" value="fmr_0" id="fmr_0" checked> Studio </label><br>
-            <label><input type="checkbox" value="fmr_1" id="fmr_1" checked> 1 Bedrom </label><br>
+            <label><input type="checkbox" value="fmr_1" id="fmr_1" checked> 1 Bedroom </label><br>
             <label><input type="checkbox" value="fmr_2" id="fmr_2" checked> 2 Bedroom </label><br>
             <label><input type="checkbox" value="fmr_3" id="fmr_3" checked> 3 Bedroom </label><br>
             <label><input type="checkbox" value="fmr_4" id="fmr_4" checked> 4 Bedroom </label><br>
         </div>
+        <div id="legend-container" style="padding-right: 20px; padding-left: 30px;">
+        </div>
     </div>
-    <div id = "legend-container" style="vertical-align: top; border: solid; width: fit-content; padding-left: 20px; padding-right: 30px;"></div>
-
-    <br>
-    <svg width = "960" height = "500"></svg>
+    
+    <div>
+        <svg width="960" height="500"></svg>
+    </div>
+   
 
     <script>
         let fmr0Data = [];
