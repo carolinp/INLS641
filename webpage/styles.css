@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    font-size: 16px;
 }
 
 .top-container {
@@ -47,14 +48,19 @@ body {
     background-color: #fafafa;
 }
 */
+h1 {
+    font-size: 2em;
+}
 
 h2 {
     margin-top: 0;
+    font-size: 1.5em;
 }
 
 .county {
     stroke: #fff;
     stroke-width: 1px;
+    cursor: pointer;
 }
 #details {
     position: absolute;
