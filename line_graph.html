@@ -133,13 +133,15 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 
-    function updateGraphBasedOnCounty() {
-        if (!combinedData || combinedData.length === 0) {
-            console.error("combinedData is not yet populated.");
-            return;
-             }     
-        const CountySelect = document.getElementById("County-select");
+    function updateGraphBasedOnCounty() {   
+            const CountySelect = document.getElementById("County-select");
             const selectedCounty = CountySelect.value; 
+
+            const checkboxes = document.querySelectorAll("input[type = 'checkbox']");
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            })
+
             const filteredData = filterDataByCounty(combinedData, selectedCounty);
             drawGraph(filteredData);
         }
@@ -268,18 +270,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         combinedData.push(CountyData);
     });
-    //console.log("Final Combined Data after Preprocessing:", JSON.stringify(combinedData, null, 2));
 
    populateCountySelector(combinedData);
    const defaultCounty = combinedData[0].County;
    const defaultData = filterDataByCounty(combinedData, defaultCounty);
-   //console.log("Filtered Data for Default County:", JSON.stringify(defaultData, null, 2));
    drawGraph(defaultData); 
    document.getElementById("County-select").addEventListener("change", updateGraphBasedOnCounty);
-})//.catch(error => console.error("Error loading data:", error));
+})
 
     function drawGraph(data) {
-        //console.log("Data passed to drawGraph:", JSON.stringify(data, null, 2));
         d3.select("svg").select(".graph-content").remove();
 
         const svg = d3.select("svg"),
@@ -315,7 +314,6 @@ document.addEventListener("DOMContentLoaded", function() {
             .defined(d => d.value !== null);
 
             data.forEach(County => {
-                //console.log("County Data:", County);
                 if (!County || !County.County) {
                 console.warn("Invalid County Data:", County);
                 return;
